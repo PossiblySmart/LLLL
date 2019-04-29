@@ -1,23 +1,127 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Hazeman's Tower Defense</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Nizomiddin Toshpulatov, Hazeman">
-        <meta name="description" content="Free online tower defense game. Defend yourself!">
-        <meta name="keywords" content="tower defense, online, free, game, hazeman, STU, FIIT">
-        <link rel="stylesheet" href="css/styles.css">
-        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-        <script src="js/main.js" type="module"></script>
-    </head>
-    <body>
-		<main id="game">
-			<section id="menu">
+	<head>
+		<title>Hazeman's Tower Defense</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Nizomiddin Toshpulatov, Hazeman">
+		<meta name="description" content="Free online tower defense game. Defend yourself!">
+		<meta name="keywords" content="tower defense, online, free, game, hazeman, STU, FIIT">
+		<link rel="stylesheet" href="css/styles.css">
+		<script src="js/blocks.js"></script>
+		<script src="js/towers.js"></script>
+		<script src="js/enemies.js"></script>
+		<script src="js/caesar.js"></script>
+		<script src="js/main.js"></script>
+	</head>
+	<body>
+		<main class="game" id="game">
+
+			<input id="menu-button" type="checkbox"></input>
+			<label class="game__menu-button" for="menu-button">
+				<svg width="35" height="19">
+					<rect x="10" y="0" width="35" height="3"></rect>
+					<rect x="5" y="8" width="35" height="3"></rect>
+					<rect y="16" width="35" height="3"></rect>
+				</svg>
+			</label>
+			
+			<h1 class="game__title">Hazeman's tower defense<br><small>- defend yourself -</small></h1>
+
+			<section class="game__menu">
+				<h2 class="game__menu__title">- Towers -</h2>
+				<div class="game__menu__tower" id="galactic-marine-purchase-btn">
+					<img class="game__menu__tower-thumbnail" width="80" height="80" src="media/objects/tower-tier-1.svg">
+					<h3 class="game__menu__tower-title"><mark class="cyan_">Galactic Marine</mark></h3>
+					<p class="game__menu__tower-description">
+						Tier 1 tower with basic stats. Click to buy one unit of Galactic Marines special force.   
+					</p>
+					<div class="game__menu__tower-price">
+						<p>100</p>
+					</div>
+				</div>
+				<div class="game__menu__tower" id="orcus-charger-purchase-btn">
+					<img class="game__menu__tower-thumbnail" width="80" height="80" src="media/objects/tower-tier-2.svg">
+					<h3 class="game__menu__tower-title"><mark class="orange_">Orcus Charger</mark></h3>
+					<p class="game__menu__tower-description">
+						Tier 2 tower with advance stats. Click to buy one unit of Orcus Charger elite force.
+					</p>
+					<div class="game__menu__tower-price">
+						<p>500</p>
+					</div>
+				</div>
+				<div class="game__menu__tower" id="cpt-andromeda-purchase-btn">
+					<img class="game__menu__tower-thumbnail" width="80" height="80" src="media/objects/tower-tier-3.svg">
+					<h3 class="game__menu__tower-title"><mark class="darkviolet_">Cpt. Andromeda</mark></h3>
+					<p class="game__menu__tower-description">
+						Tier 3 tower with powerful stats. Click to buy captain Andromeda, legendary warrior.
+					</p>
+					<div class="game__menu__tower-price">
+						<p>1500</p>
+					</div>
+				</div>
 			</section>
-			<canvas id="canvas" width="800" height="600"></canvas>
-			<section id="stats">
+
+			<div id="canvas">
+				<canvas id="background-canvas" width="1000" height="600"></canvas>
+				<canvas id="main-canvas" width="1000" height="600"></canvas>
+			</div>
+
+			<section class="game__stats">
+				<h2 class="game__stats__title"><mark class="yellow_">- Game Statistics -</mark></h2>
+				<h3 class="game__stats__subtitle game__stats__towers-stat-title">Towers</h3>
+				<p class="game__stats__towers-stat-names">
+					Amount: <br>
+					Upgradable: <br>
+					Max tier:
+				</p>
+				<p class="game__stats__towers-stat-values">
+					<mark class="cyan_" id="towers_amount"><b>13</b></mark><br>
+					<mark class="yellow_" id="towers_upgradable"><b>5</b></mark><br>
+					<mark class="violet_" id="towers_max-tier"><b>3</b></mark>
+				</p>
+				<h3 class="game__stats__subtitle game__stats__enemies-stat-title">Enemies</h3>
+				<p class="game__stats__enemies-stat-names">
+					Amount: <br>
+					Max tier: <br>
+					Total defeated:
+				</p>
+				<p class="game__stats__enemies-stat-values">
+					<mark class="toxic-green_" id="toxic-carriers_amount"><b>7</b></mark><br>
+					<mark class="violet_" id="toxic-carriers_max-tier"><b>3</b></mark><br>
+					<mark class="red_" id="toxic-carriers_total-defeated"><b>43</b></mark>
+				</p>
+				<h3 class="game__stats__subtitle game__stats__wave-stat-title">Wave</h3>
+				<p class="game__stats__wave-stat-names">
+					Current: <br>
+					<mark class="red_">*</mark>Until next:
+				</p>
+				<p class="game__stats__wave-stat-values">
+					<mark class="green_" id="wave_current"><b>2</b></mark><br>
+					<mark class="orange_" id="wave_until-next"><b>13</b></mark>
+				</p>
+				<summary class="game__stats__summary">
+					<mark class="red_">*</mark>Enemies required to defeat, before next wave starts.
+				</summary>
 			</section>
+
+			<div class="game__sound-control"></div>
+
+			<summary class="game__summary">
+				Created by Hazeman. Slovak University of Technology Faculty of Informatics And Information Technolgies. Bratislava, 2019.
+			</summary>
 		</main>
-    </body>
+		
+		<img id="galactic-marine" width="64" height="80" src="media/objects/tower-tier-1.svg" alt="" hidden="true">
+		<img id="orcus-charger" width="64" height="80" src="media/objects/tower-tier-2.svg" alt="" hidden="true">
+		<img id="cpt-andromeda" width="64" height="84" src="media/objects/tower-tier-3.svg" alt="" hidden="true">
+		<img id="toxic-carrier" width="42" height="70" src="media/objects/toxic-carrier.svg" alt="" hidden="true">
+		<img id="toxic-spreader" src="media/objects/toxic-spreader.svg" alt="" hidden="true">
+		<img id="double-toxic-carrier" src="media/objects/double-toxic-carrier.svg" alt="" hidden="true">
+		<img id="charge-tier-1" src="media/objects/charge-tier-1.svg" alt="" hidden="true">
+		<img id="charge-tier-2" src="media/objects/charge-tier-2.svg" alt="" hidden="true">
+		<img id="charge-tier-3" src="media/objects/charge-tier-3.svg" alt="" hidden="true">
+		<img id="breach" width="100" height="16" src="media/objects/Breach.svg" alt="" hidden="true">
+		<img id="nexus" width="100" height="16" src="media/objects/Nexus.svg" alt="" hidden="true">
+	</body>
 </html>
