@@ -30,6 +30,12 @@ class Game {
 		this.blocks.forEach(block => { block.drawSelf(); });
 	}
 
+	updateBlocks() {
+
+		this.clearBlocks();
+		this.drawBlocks();
+	}
+
 	drawScene() {
 
 		this.towers.forEach(tower => { tower.drawSelf(); });
@@ -50,12 +56,14 @@ class Game {
 	}
 
 	moveCharges() {
-		this.charges.forEach(charge => { charge.move(); });
+
+		if (this.charges.length > 0)
+			this.charges.forEach(charge => { charge.move(); });
 	}
 
 	spawnEnemy() {
 
-		let wave = this.statistics.currentWave;
+		let wave = this.statistics.wave;
 
 		switch (true) {
 

@@ -14,33 +14,25 @@ class Tower {
 
 		this.type = 'towers';
 
+		this.target = 0;
+		this.targetAngle = 0;
 		this.currentAngle = 0;
 		this.currentExperience = 0;
-
 		this.blockIndex = 0;
-
 		this.rangeStart = 0;
 		this.rangeEnd = 0;
+		this.shotsInterval = 0;
 
 		this.showRange = false;
 		this.isUpgradable = false;
-
-		this.target = 0;
-		this.targetAngle = 0;
-
 		this.targetAcquired = false;
 		this.rotationComplete = false;
-		
+		this.targetDefeated = false;
 		this.firstShot = true;
-		this.shotsInterval = 0;
 	}
 
 	clearSelf() {
         this.context.clearRect(this.x, this.y, this.size, this.size);
-	}
-
-	targetDefeated() {
-		return this.target.health <= 0 ? true : false;
 	}
 
 	targetOutOfRange() {
@@ -50,30 +42,35 @@ class Tower {
 	calculateTargetAngle() {
 		return Math.floor(Math.atan2(this.target.y - this.y, this.target.x - this.x) * 180 / Math.PI) + 90;
 	}
+
+	reset() {
+
+		this.rotationComplete = false;
+		this.targetAcquired = false;
+		this.firstShot = true;
+		this.target = 0;
+	}
 	
 	defendNexus() {
 
 		if (this.targetAcquired) {
 
-			if (this.targetDefeated()) {
+			if (this.targetOutOfRange() || this.target.currentBlock.is('nexus')) {
+				this.reset();
+				return;
+			}
+
+			if (this.targetDefeated) {
 
 				this.currentExperience += this.target.tier * this.target.tier * 50 + (this.target.tier - 1) * 100;
 				this.currentExperience += Math.random() * 100 > Math.random() * 90 ? this.target.tier * this.target.tier * 50 : 0;
-			}
 
-			if (this.targetDefeated() || this.targetOutOfRange() || this.target.currentBlock.is('nexus')) {
-
-				this.rotationComplete = false;
-				this.targetAcquired = false;
-				
-				this.firstShot = true;
-				this.target = 0;
-				
+				this.reset();
 				return;
 			}
 
 			if (this.rotationComplete) {
-				//this.shoot();
+				this.shoot();
 			}
 
 			this.targetAngle = this.calculateTargetAngle();
@@ -131,7 +128,7 @@ class Tower {
 		if (this.firstShot) {
 			this.firstShot = false;
 			this.game.charges.push(
-				new Charge(this.canvas, this.x, this.y, this.size, this.currentAngle, this.chargeSpeed, this.tier, this.target));
+				new Charge(this.canvas, this.x, this.y, this.size, this.currentAngle, this.chargeSpeed, this.tier, this, this.target));
 		}
 
 		else {
@@ -193,12 +190,8 @@ class GalacticMarine extends Tower {
 
 		super(game, statistics, canvas, objectSize, x, y);
 
-		for (let property in ShopItems.galacticMarine)
-			this[property] = ShopItems.galacticMarine[property];
-
-		this.image = document.getElementById(this.imageID);
-		this.width = this.image.width;
-		this.height = this.image.height;
+		for (let property in Towers.galacticMarine)
+			this[property] = Towers.galacticMarine[property];
 	}
 }
 
@@ -208,12 +201,8 @@ class OrcusCharger extends Tower {
 
 		super(game, statistics, canvas, objectSize, x, y);
 		
-		for (let property in ShopItems.orcusCharger)
-			this[property] = ShopItems.orcusCharger[property];
-
-		this.image = document.getElementById(this.imageID);
-		this.width = this.image.width;
-		this.height = this.image.height;
+		for (let property in Towers.orcusCharger)
+			this[property] = Towers.orcusCharger[property];
 	}
 }
 
@@ -223,11 +212,7 @@ class CptAndromeda extends Tower {
 
 		super(game, statistics, canvas, objectSize, x, y);
 
-		for (let property in ShopItems.cptAndromeda)
-			this[property] = ShopItems.cptAndromeda[property];
-
-		this.image = document.getElementById(this.imageID);
-		this.width = this.image.width;
-		this.height = this.image.height;
+		for (let property in Towers.cptAndromeda)
+			this[property] = Towers.cptAndromeda[property];
 	}
 }

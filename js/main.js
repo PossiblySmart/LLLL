@@ -30,9 +30,9 @@ function startGame() {
         clearInterval(spawnInterval);
     });
 
-    setInterval(function() {
-        game.enemies.forEach(enemy => { enemy.hit(25); });
-    }, 1500);
+    // setInterval(function() {
+    //     game.enemies.forEach(enemy => { enemy.hit(25); });
+    // }, 1500);
 
     game.makeLevel(0, 0);
     game.drawBlocks();
@@ -47,7 +47,7 @@ function startGame() {
         game.activateDefense();
         game.moveEnemies();
         shop.checkGold();
-        //game.moveCharges();
+        game.moveCharges();
         game.drawScene();
 
         requestAnimationFrame(refresh);

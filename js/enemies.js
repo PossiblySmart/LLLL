@@ -19,6 +19,14 @@ class Enemy {
 		this.x = x;
 		this.y = y;
 
+		this.bodyWidthStart = this.x + (this.size - this.width) / 2;
+		this.bodyWidthEnd = this.bodyWidthStart + this.width;
+
+		this.bodyHeightStart = this.y + (this.size - this.height) / 2;
+		this.bodyHeightEnd = this.bodyHeightStart + this.height;
+
+		this.body
+
 		this.blocks = blocks;
 		
 		this.blockIndex;
@@ -69,14 +77,24 @@ class Enemy {
 		return (this.x == this.targetBlock.x && this.y == this.targetBlock.y) ? true : false;
 	}
 
-	fade() { this.alpha -= 0.1; }
+	isDefeated() {
+		return this.health <= 0 ? true : false;
+	}
+
+	fade() {
+		this.alpha -= 0.1;
+	}
 
 	move() {
 
-		if (this.health <= 0) {
+		if (this.isDefeated()) {
 
-			if (this.alpha > 0 ) this.fade();
-			else this.statistics.enemyDown(this);
+			if (this.alpha > 0 )
+				this.fade();
+			
+			else
+				this.statistics.enemyDown(this);
+
 			return;
 		}
 
@@ -117,8 +135,10 @@ class Enemy {
 
 			if (this.direction == 'top')
 				return 'right';
+
 			else if (this.direction == 'bottom' && this.movesCounter > this.canvas.height / this.size)
 				return 'right';
+
 			else
 				return this.randomDirection('right', 'bottom', 50);
 		}
@@ -127,6 +147,7 @@ class Enemy {
 
 			if (this.movesCounter > 0 && this.movesCounter <= this.canvas.height / this.size)
 				return this.randomDirection('top', 'bottom', 50);
+
 			else
 				return 'bottom';
 		}
@@ -171,12 +192,12 @@ class Enemy {
 
 	hit(amount) {
 
+		const enemy = this;
+
 		this.health -= amount;
 		this.image = document.getElementById(this.name + '-hit');
 
-		var enemy = this;
-
-		setTimeout(function() {
+		setTimeout(() => {
 			enemy.image = document.getElementById(enemy.name);
 		}, 250);
 	}
