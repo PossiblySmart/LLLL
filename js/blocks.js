@@ -7,6 +7,8 @@ class Block {
 
         this.status = status;
         this.size = size;
+
+        this.number = 0;
         
         this.x = x;
         this.y = y;
@@ -30,20 +32,26 @@ class Road extends Block {
     constructor(canvas, x, y, size, status) {
 
         super(canvas, x, y, size, status);
+        
         this.type = 'road';
+
+        this.hasEnemy = false;
+        this.enemy = 0;
     }
 
     drawSelf() {
 
-        if (this.isOccupied())
-            this.context.fillStyle = 'rgba(255, 255, 0, .1)';
-        
-        else
-            this.context.fillStyle = 'rgba(0, 0, 0, 0)';
-
+        this.context.fillStyle = 'rgba(0, 0, 0, 0)';
 		this.context.fillRect(this.x, this.y, this.size, this.size);
 		this.context.strokeStyle = 'rgba(255, 0, 255, .3)';
-		this.context.strokeRect(this.x, this.y, this.size, this.size);
+        this.context.strokeRect(this.x, this.y, this.size, this.size);
+        
+        if (this.number) {
+
+            this.context.fillStyle = Colors.light;
+            this.context.font = '20px sans';
+            this.context.fillText(this.number, this.x + this.size / 2 - 5, this.y + this.size / 2);
+        }
 	}
 }
 
@@ -52,20 +60,32 @@ class TowerSpot extends Block {
     constructor(canvas, x, y, size, status) {
 
         super(canvas, x, y, size, status);
+        
         this.type = 'tower-spot';
+        this.tower = 0;
     }
 
     drawSelf() {
 
-        if (this.isOccupied())
-            this.context.fillStyle = 'rgba(0, 255, 255, .05)';
+        switch(this.tower.tier) {
 
-        else
-            this.context.fillStyle = 'rgba(44, 34, 48, .35)';
+            case 1: this.context.fillStyle = 'rgba(0, 255, 255, .1)'; break;
+            case 2: this.context.fillStyle = 'rgba(255, 127, 0, .1)'; break;
+            case 3: this.context.fillStyle = 'rgba(255, 0, 255, .1)'; break;
+            
+            default: this.context.fillStyle = 'rgba(44, 34, 48, .35)'; break;
+        }
 
 		this.context.fillRect(this.x, this.y, this.size, this.size);
 		this.context.strokeStyle = '#ff00ff';
-		this.context.strokeRect(this.x, this.y, this.size, this.size);
+        this.context.strokeRect(this.x, this.y, this.size, this.size);
+        
+        if (this.number) {
+
+            this.context.fillStyle = Colors.light;
+            this.context.font = '20px sans';
+            this.context.fillText(this.number, this.x + 35, this.y + 35);
+        }
     }
 }
 

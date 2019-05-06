@@ -38,7 +38,7 @@ $colors: (
 
 $box-size: 70px;
 $border-radius: 4px;
-$border: 2px solid black;
+$border: 1px solid color(yellow_);
 
 body {
 
@@ -50,6 +50,7 @@ body {
 	font-style: normal;
 	font-size: 0.9rem;
 	color: color(light_);
+	overflow: hidden;
 }
 
 mark {
@@ -170,6 +171,64 @@ summary {
 
 	&__menu {
 
+		@keyframes flicker {
+			
+			0% {
+
+				color: color(cyan_);
+				text-shadow: .05em .05em color(violet_);
+			}
+
+			20% {
+
+				color: color(cyan_);
+				text-shadow: .05em .05em color(violet_);
+			}
+
+			22% {
+
+				color: color(violet_);
+				text-shadow: .05em .05em color(cyan_);
+			}
+
+			24% {
+
+				color: color(violet_);
+				text-shadow: .05em .05em color(cyan_);
+			}
+
+			26% {
+
+				color: color(cyan_);
+				text-shadow: .05em .05em color(violet_);
+			}
+
+			28% {
+
+				color: color(cyan_);
+				text-shadow: .05em .05em color(violet_);
+			}
+
+			30% {
+
+				color: color(violet_);
+				text-shadow: .05em .05em color(cyan_);
+			}
+
+			35% {
+
+				color: color(violet_);
+				text-shadow: .05em .05em color(cyan_);
+			}
+
+			40% {
+
+				color: color(cyan_);
+				text-shadow: .05em .05em color(violet_);
+			}
+		}
+
+		z-index: 999;
 		grid-area: menu;
 		display: grid;
 		grid-template-columns: 1fr;
@@ -190,6 +249,12 @@ summary {
 			margin: 0;
 			text-align: center;
 			text-shadow: .05em .05em color(violet_);
+			cursor: default;
+			animation: none;
+
+			&:hover {
+				animation: flicker 3s ease-in-out 200ms infinite;
+			}
 		}
 
 		@for $i from 1 through 3 {
@@ -213,10 +278,13 @@ summary {
 			border-radius: .5em;
 			padding: 1em .5em;
 			cursor: pointer;
+			transform: scale(1);
 			transition: border-color 200ms ease-in-out,
-						background-color 200ms ease-in-out;
+						background-color 200ms ease-in-out,
+						transform 200ms ease-in-out;
 
 			&:hover { border-color: rgba(color(violet_), .25) }
+			&:active { transform: scale(0.9) }
 		}
 
 		&__tower-title {
@@ -321,11 +389,310 @@ summary {
 		opacity: .75;
 		background-image: url('../media/images/sound-on.png');
 		background-size: cover;
-		transition: opacity 200ms ease-in-out;
+		transform: scale(1);
+		transition: opacity 200ms ease-in-out,
+					transform 200ms ease-in-out;
 
 		&:hover {
 			opacity: 1;
 			animation: sound 350ms ease-in-out forwards;
+		}
+
+		&:active { transform: scale(0.7) }
+	}
+
+	&__nuclear-gold  {
+
+		position: absolute;
+		right: 5rem;
+		bottom: -1rem;
+		font-size: 2.5em;
+		font-weight: 800;
+		margin: 0;
+		color: color(yellow_);
+		text-shadow: .05em .05em 0 color(orange_);
+		cursor: default;
+		filter: none;
+		transition: filter 200ms ease-in-out;
+
+		&::before {
+
+			content: '';
+			position: absolute;
+			right: 120%;
+			bottom: .3rem;
+			height: 1em;
+			width: 1em;
+			background-image: url('../media/images/nuclear-gold.png');
+			background-size: contain;
+		}
+
+		&:hover {
+			filter: contrast(150%);
+		}
+	}
+
+	&__nuclear-gold_minus {
+
+		position: absolute;
+		right: 5rem;
+		bottom: -1rem;
+		font-size: 2.5em;
+		font-weight: 800;
+		margin: 0;
+		opacity: 0;
+		color: color(red_);
+		cursor: default;
+		transition: opacity 300ms ease-in-out,
+					bottom 300ms ease-in-out;
+
+		&::before {
+			content: '-';
+		}
+	}
+
+	&__nuclear-gold_plus {
+
+		position: absolute;
+		right: 5rem;
+		bottom: -1rem;
+		font-size: 2.5em;
+		font-weight: 800;
+		margin: 0;
+		opacity: 0;
+		color: color(green_);
+		cursor: default;
+		transition: opacity 300ms ease-in-out,
+					bottom 300ms ease-in-out;
+
+		&::before {
+			content: '+';
+		}
+	}
+
+	&__tower-info {
+
+		z-index: 999;
+		position: absolute;
+		display: flex;
+		flex-flow: column;
+		align-items: center;
+		transform: scale(0);
+		opacity: 0;
+		transform-origin: bottom left;
+		top: 2em;
+		left: 2em;
+		padding: 1.5em 1em;
+		line-height: 1.5;
+		background-color: color(dark_);
+		border: $border;
+		border-radius: $border-radius;
+		transition: transform 150ms cubic-bezier(0.455, 0.03, 0.515, 0.955),
+					opacity 500ms ease-in-out;
+	}
+
+	&__tower-name {
+
+		color: white;
+		margin-top: 0;
+	}
+
+	&__tower-stats {
+
+		margin: 0;
+		padding: 0;
+	}
+
+	&__tower-upgrade, &__tower-sell {
+
+		margin-top: 1em;
+		width: 100%;
+		padding: .5em;
+		text-align: center;
+		text-transform: uppercase;
+		font-weight: 700;
+		font-family: inherit;
+		color: color(yellow_);
+		border: $border;
+		border-radius: $border-radius;
+		background-color: transparent;
+		cursor: pointer;
+		transition: filter 150ms ease-in-out,
+					color 150ms ease-in-out,
+					background-color 150ms ease-in-out;
+
+		&:hover {
+			
+			color: color(dark_);
+			background-color: color(yellow_);
+		}
+
+		&.unavailable {
+			
+			background-color: gray;
+			color: color(dark_);
+
+			&:hover {
+
+				background-color: gray;
+				color: color(dark_);
+			}
+		}
+	}
+
+	&__tower-upgrade:hover ~ .game__tower-stats_upgrade {
+			
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	&__tower-sell {
+
+		color: color(violet_);
+		border: 1px solid color(violet_);
+
+		&:hover {
+			
+			color: color(dark_);
+			background-color: color(violet_);
+		}
+	}
+
+	&__tower-stats_upgrade {
+
+		z-index: 999;
+		margin: 0;
+		position: absolute;
+		width: 120%;
+		right: -110%;
+		bottom: 8%;
+		background-color: color(dark_);
+		border: 1px solid color(green_);
+		border-radius: $border-radius;
+		padding: 1em;
+		opacity: 0;
+		transform: scale(0);
+		transform-origin: left;
+		transition: transform 150ms ease-in-out,
+					opacity 350ms ease-in-out;
+	}
+
+	&__message {
+
+		z-index: 999;
+		position: absolute;
+		right: 2em;
+		top: 2em;
+		padding: 1.5em 1em;
+		background-color: color(dark_);
+		border: $border;
+		border-radius: $border-radius;
+		opacity: 0;
+		transform: scale(0);
+		transform-origin: right;
+		display: grid;
+		gap: 1em;
+		grid: "explanation-mark title"
+			  "explanation-mark body"
+			  "button		  button" / 4em 18em;
+		transition: transform 150ms ease-in-out,
+			  		opacity 350ms ease-in-out;
+
+		&__explanation-mark {
+			
+			grid-area: explanation-mark;
+			position: relative;
+			justify-self: center;
+			align-self: center;
+			font-size: 5em;
+			font-weight: 900;
+			line-height: 0;
+			margin: 0;
+			padding: 0;
+			color: color(orange_);
+		}
+
+		&__title {
+
+			grid-area: title;
+			margin: 0;
+		}
+
+		&__body {
+
+			grid-area: body;
+			margin: 0;
+		}
+
+		&__button {
+
+			grid-area: button;
+			justify-self: center;
+			padding: .5em;
+			text-align: center;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: color(yellow_);
+			border: $border;
+			border-radius: $border-radius;
+			background-color: transparent;
+			cursor: pointer;
+			transition: filter 150ms ease-in-out,
+						color 150ms ease-in-out,
+						background-color 150ms ease-in-out;
+
+			&:hover {
+				
+				color: color(dark_);
+				background-color: color(yellow_);
+			}
+			
+		}
+	}
+
+	.tooltip {
+
+		&::after {
+
+			content: '';
+			display: none;
+			position: absolute;
+			width: 1em;
+			height: 1em;
+			background-color: inherit;
+			border: inherit;
+			border-top-color: transparent;
+			border-right-color: transparent;
+		}
+
+		&.top, &.left, &.right, &.bottom { &::after { display: block } }
+
+		&.top::after {
+
+			left: 50%;
+			top: 0;
+			transform: translate(-50%, -50%) rotate(135deg);
+		}
+
+		&.left::after {
+
+			left: 0;
+			top: 50%;
+			transform: translateX(-50%) rotate(45deg);
+		}
+
+		&.right::after {
+
+			right: 0;
+			top: 50%;
+			transform: translateX(50%) rotate(-135deg);
+		}
+
+		&.bottom::after {
+
+			left: 50%;
+			bottom: 0;
+			transform: translate(-50%, 50%) rotate(-45deg);
 		}
 	}
 
@@ -412,6 +779,12 @@ summary {
 			left: 2em;
 			bottom: 0;
 			top: 90%;
+		}
+
+		&__message {
+
+			top: initial;
+			bottom: 1em;
 		}
 	}
 }

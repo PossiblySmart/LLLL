@@ -12,6 +12,7 @@ body {
   font-style: normal;
   font-size: 0.9rem;
   color: #e2e2e2;
+  overflow: hidden;
 }
 
 mark {
@@ -184,12 +185,51 @@ summary {
   font-size: 0.6em;
 }
 .game__menu {
+  z-index: 999;
   grid-area: menu;
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1.5em;
   place-items: center;
   grid-template-areas: "title" "tower-tier-1" "tower-tier-2" "tower-tier-3";
+}
+@keyframes flicker {
+  0% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  20% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  22% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  24% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  26% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  28% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  30% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  35% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  40% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
 }
 .game__menu__title {
   grid-area: title;
@@ -200,6 +240,11 @@ summary {
   margin: 0;
   text-align: center;
   text-shadow: 0.05em 0.05em #ff00ff;
+  cursor: default;
+  animation: none;
+}
+.game__menu__title:hover {
+  animation: flicker 3s ease-in-out 200ms infinite;
 }
 .game__menu__tower:nth-of-type(1) {
   grid-area: tower-tier-1;
@@ -229,10 +274,14 @@ summary {
   border-radius: 0.5em;
   padding: 1em 0.5em;
   cursor: pointer;
-  transition: border-color 200ms ease-in-out, background-color 200ms ease-in-out;
+  transform: scale(1);
+  transition: border-color 200ms ease-in-out, background-color 200ms ease-in-out, transform 200ms ease-in-out;
 }
 .game__menu__tower:hover {
   border-color: rgba(255, 0, 255, 0.25);
+}
+.game__menu__tower:active {
+  transform: scale(0.9);
 }
 .game__menu__tower-title {
   grid-area: title;
@@ -361,11 +410,241 @@ summary {
   opacity: 0.75;
   background-image: url("../media/images/sound-on.png");
   background-size: cover;
-  transition: opacity 200ms ease-in-out;
+  transform: scale(1);
+  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
 }
 .game__sound-control:hover {
   opacity: 1;
   animation: sound 350ms ease-in-out forwards;
+}
+.game__sound-control:active {
+  transform: scale(0.7);
+}
+.game__nuclear-gold {
+  position: absolute;
+  right: 5rem;
+  bottom: -1rem;
+  font-size: 2.5em;
+  font-weight: 800;
+  margin: 0;
+  color: #ffff00;
+  text-shadow: 0.05em 0.05em 0 #ffa500;
+  cursor: default;
+  filter: none;
+  transition: filter 200ms ease-in-out;
+}
+.game__nuclear-gold::before {
+  content: "";
+  position: absolute;
+  right: 120%;
+  bottom: 0.3rem;
+  height: 1em;
+  width: 1em;
+  background-image: url("../media/images/nuclear-gold.png");
+  background-size: contain;
+}
+.game__nuclear-gold:hover {
+  filter: contrast(150%);
+}
+.game__nuclear-gold_minus {
+  position: absolute;
+  right: 5rem;
+  bottom: -1rem;
+  font-size: 2.5em;
+  font-weight: 800;
+  margin: 0;
+  opacity: 0;
+  color: #ff0000;
+  cursor: default;
+  transition: opacity 300ms ease-in-out, bottom 300ms ease-in-out;
+}
+.game__nuclear-gold_minus::before {
+  content: "-";
+}
+.game__nuclear-gold_plus {
+  position: absolute;
+  right: 5rem;
+  bottom: -1rem;
+  font-size: 2.5em;
+  font-weight: 800;
+  margin: 0;
+  opacity: 0;
+  color: #00ff00;
+  cursor: default;
+  transition: opacity 300ms ease-in-out, bottom 300ms ease-in-out;
+}
+.game__nuclear-gold_plus::before {
+  content: "+";
+}
+.game__tower-info {
+  z-index: 999;
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  transform: scale(0);
+  opacity: 0;
+  transform-origin: bottom left;
+  top: 2em;
+  left: 2em;
+  padding: 1.5em 1em;
+  line-height: 1.5;
+  background-color: #1b1926;
+  border: 1px solid #ffff00;
+  border-radius: 4px;
+  transition: transform 150ms cubic-bezier(0.455, 0.03, 0.515, 0.955), opacity 500ms ease-in-out;
+}
+.game__tower-name {
+  color: white;
+  margin-top: 0;
+}
+.game__tower-stats {
+  margin: 0;
+  padding: 0;
+}
+.game__tower-upgrade, .game__tower-sell {
+  margin-top: 1em;
+  width: 100%;
+  padding: 0.5em;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: inherit;
+  color: #ffff00;
+  border: 1px solid #ffff00;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: filter 150ms ease-in-out, color 150ms ease-in-out, background-color 150ms ease-in-out;
+}
+.game__tower-upgrade:hover, .game__tower-sell:hover {
+  color: #1b1926;
+  background-color: #ffff00;
+}
+.game__tower-upgrade.unavailable, .game__tower-sell.unavailable {
+  background-color: gray;
+  color: #1b1926;
+}
+.game__tower-upgrade.unavailable:hover, .game__tower-sell.unavailable:hover {
+  background-color: gray;
+  color: #1b1926;
+}
+.game__tower-upgrade:hover ~ .game__tower-stats_upgrade {
+  transform: scale(1);
+  opacity: 1;
+}
+.game__tower-sell {
+  color: #ff00ff;
+  border: 1px solid #ff00ff;
+}
+.game__tower-sell:hover {
+  color: #1b1926;
+  background-color: #ff00ff;
+}
+.game__tower-stats_upgrade {
+  z-index: 999;
+  margin: 0;
+  position: absolute;
+  width: 120%;
+  right: -110%;
+  bottom: 8%;
+  background-color: #1b1926;
+  border: 1px solid #00ff00;
+  border-radius: 4px;
+  padding: 1em;
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: left;
+  transition: transform 150ms ease-in-out, opacity 350ms ease-in-out;
+}
+.game__message {
+  z-index: 999;
+  position: absolute;
+  right: 2em;
+  top: 2em;
+  padding: 1.5em 1em;
+  background-color: #1b1926;
+  border: 1px solid #ffff00;
+  border-radius: 4px;
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: right;
+  display: grid;
+  gap: 1em;
+  grid: "explanation-mark title" "explanation-mark body" "button		  button"/4em 18em;
+  transition: transform 150ms ease-in-out, opacity 350ms ease-in-out;
+}
+.game__message__explanation-mark {
+  grid-area: explanation-mark;
+  position: relative;
+  justify-self: center;
+  align-self: center;
+  font-size: 5em;
+  font-weight: 900;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  color: #ffa500;
+}
+.game__message__title {
+  grid-area: title;
+  margin: 0;
+}
+.game__message__body {
+  grid-area: body;
+  margin: 0;
+}
+.game__message__button {
+  grid-area: button;
+  justify-self: center;
+  padding: 0.5em;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #ffff00;
+  border: 1px solid #ffff00;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: filter 150ms ease-in-out, color 150ms ease-in-out, background-color 150ms ease-in-out;
+}
+.game__message__button:hover {
+  color: #1b1926;
+  background-color: #ffff00;
+}
+.game .tooltip::after {
+  content: "";
+  display: none;
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  background-color: inherit;
+  border: inherit;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+.game .tooltip.top::after, .game .tooltip.left::after, .game .tooltip.right::after, .game .tooltip.bottom::after {
+  display: block;
+}
+.game .tooltip.top::after {
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+.game .tooltip.left::after {
+  left: 0;
+  top: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+.game .tooltip.right::after {
+  right: 0;
+  top: 50%;
+  transform: translateX(50%) rotate(-135deg);
+}
+.game .tooltip.bottom::after {
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%) rotate(-45deg);
 }
 @media (max-width: 1800px) {
   .game__menu__tower {
@@ -433,6 +712,10 @@ summary {
     left: 2em;
     bottom: 0;
     top: 90%;
+  }
+  .game__message {
+    top: initial;
+    bottom: 1em;
   }
 }
 

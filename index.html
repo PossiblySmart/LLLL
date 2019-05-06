@@ -8,14 +8,26 @@
 		<meta name="description" content="Free online tower defense game. Defend yourself!">
 		<meta name="keywords" content="tower defense, online, free, game, hazeman, STU, FIIT">
 		<link rel="stylesheet" href="css/styles.css">
+		<script src="js/colors.js"></script>
+		<script src="js/shop-items.js"></script>
 		<script src="js/blocks.js"></script>
+		<script src="js/charge.js"></script>
 		<script src="js/towers.js"></script>
 		<script src="js/enemies.js"></script>
-		<script src="js/caesar.js"></script>
+		<script src="js/statistics.js"></script>
+		<script src="js/shop.js"></script>
+		<script src="js/game.js"></script>
 		<script src="js/main.js"></script>
 	</head>
 	<body>
 		<main class="game" id="game">
+
+			<div class="game__message tooltip right" id="message">
+				<p class="game__message__explanation-mark">!</p>
+				<h3 class="game__message__title" id="message-title"></h3>
+				<p class="game__message__body" id="message-body"></p>
+				<button class="game__message__button" id="do-not-show">Don't show again</button>
+			</div>
 
 			<input id="menu-button" type="checkbox"></input>
 			<label class="game__menu-button" for="menu-button">
@@ -63,6 +75,25 @@
 			</section>
 
 			<div id="canvas">
+				<div class="game__tower-info tooltip" id="tower-info">
+					<h3 class="game__tower-name">Galactic Marine</h3>
+					<ul class="game__tower-stats">
+						<li>Current EXP: <mark class="yellow_"><b id="current-exp">13</b></mark></li>
+						<li>Rotation Speed: <mark class="violet_"><b id="rotation-speed">13</b></mark><br></li>
+						<li>Fire Rate: <mark class="orange_"><b id="fire-rate">13</b></mark><br></li>
+						<li>Charge Power: <mark class="cyan_"><b id="charge-power">13</b></mark><br></li>
+						<li>Charge Speed: <mark class="blue_"><b id="charge-speed">13</b></mark><br></li>
+					</ul>
+					<button class="game__tower-upgrade" id="upgrade">Upgrade</button>
+					<button class="game__tower-sell" id="sell">Sell</button>
+					<ul class="game__tower-stats_upgrade tooltip left" id="tower-info_upgrade">
+						<li>Rotation Speed: <b id="rotation-speed_upgrade">1.5</b><br></li>
+						<li>Fire Rate: <b id="fire-rate_upgrade">2.5</b><br></li>
+						<li>Charge Power: <b id="charge-power_upgrade">3.5</b><br></li>
+						<li>Charge Speed: <b id="charge-speed_upgrade">1.5</b><br></li>
+						<li><b><br>Price: <span id="upgrade-price">100 NG</span></b></li>
+					</ul>
+				</div>
 				<canvas id="background-canvas" width="1000" height="600"></canvas>
 				<canvas id="main-canvas" width="1000" height="600"></canvas>
 			</div>
@@ -76,9 +107,9 @@
 					Max tier:
 				</p>
 				<p class="game__stats__towers-stat-values">
-					<mark class="cyan_" id="towers_amount"><b>13</b></mark><br>
-					<mark class="yellow_" id="towers_upgradable"><b>5</b></mark><br>
-					<mark class="violet_" id="towers_max-tier"><b>3</b></mark>
+					<mark class="cyan_"><b id="towers_amount">13</b></mark><br>
+					<mark class="yellow_"><b id="towers_upgradable">5</b></mark><br>
+					<mark class="violet_"><b id="towers_max-tier">3</b></mark>
 				</p>
 				<h3 class="game__stats__subtitle game__stats__enemies-stat-title">Enemies</h3>
 				<p class="game__stats__enemies-stat-names">
@@ -87,9 +118,9 @@
 					Total defeated:
 				</p>
 				<p class="game__stats__enemies-stat-values">
-					<mark class="toxic-green_" id="toxic-carriers_amount"><b>7</b></mark><br>
-					<mark class="violet_" id="toxic-carriers_max-tier"><b>3</b></mark><br>
-					<mark class="red_" id="toxic-carriers_total-defeated"><b>43</b></mark>
+					<mark class="toxic-green_"><b id="toxic-carriers_amount">7</b></mark><br>
+					<mark class="violet_"><b id="toxic-carriers_max-tier">3</b></mark><br>
+					<mark class="red_"><b id="toxic-carriers_total-defeated">43</b></mark>
 				</p>
 				<h3 class="game__stats__subtitle game__stats__wave-stat-title">Wave</h3>
 				<p class="game__stats__wave-stat-names">
@@ -97,8 +128,8 @@
 					<mark class="red_">*</mark>Until next:
 				</p>
 				<p class="game__stats__wave-stat-values">
-					<mark class="green_" id="wave_current"><b>2</b></mark><br>
-					<mark class="orange_" id="wave_until-next"><b>13</b></mark>
+					<mark class="green_"><b id="wave_current">2</b></mark><br>
+					<mark class="orange_"><b id="wave_until-next">13</b></mark>
 				</p>
 				<summary class="game__stats__summary">
 					<mark class="red_">*</mark>Enemies required to defeat, before next wave starts.
@@ -107,21 +138,28 @@
 
 			<div class="game__sound-control"></div>
 
+			<p class="game__nuclear-gold_minus" id="nuclear-gold-minus">100</p>
+			<p class="game__nuclear-gold_plus" id="nuclear-gold-plus">100</p>
+			<p class="game__nuclear-gold" id="nuclear-gold">100</p>
+
 			<summary class="game__summary">
 				Created by Hazeman. Slovak University of Technology Faculty of Informatics And Information Technolgies. Bratislava, 2019.
 			</summary>
 		</main>
 		
-		<img id="galactic-marine" width="64" height="80" src="media/objects/tower-tier-1.svg" alt="" hidden="true">
-		<img id="orcus-charger" width="64" height="80" src="media/objects/tower-tier-2.svg" alt="" hidden="true">
-		<img id="cpt-andromeda" width="64" height="84" src="media/objects/tower-tier-3.svg" alt="" hidden="true">
-		<img id="toxic-carrier" width="42" height="70" src="media/objects/toxic-carrier.svg" alt="" hidden="true">
-		<img id="toxic-spreader" src="media/objects/toxic-spreader.svg" alt="" hidden="true">
-		<img id="double-toxic-carrier" src="media/objects/double-toxic-carrier.svg" alt="" hidden="true">
-		<img id="charge-tier-1" src="media/objects/charge-tier-1.svg" alt="" hidden="true">
-		<img id="charge-tier-2" src="media/objects/charge-tier-2.svg" alt="" hidden="true">
-		<img id="charge-tier-3" src="media/objects/charge-tier-3.svg" alt="" hidden="true">
-		<img id="breach" width="100" height="16" src="media/objects/Breach.svg" alt="" hidden="true">
-		<img id="nexus" width="100" height="16" src="media/objects/Nexus.svg" alt="" hidden="true">
+		<img id="galactic-marine"			width="64"	height="80" src="media/objects/tower-tier-1.svg"			alt="" hidden="true">
+		<img id="orcus-charger"				width="64"	height="80" src="media/objects/tower-tier-2.svg"			alt="" hidden="true">
+		<img id="cpt-andromeda"				width="64"	height="84" src="media/objects/tower-tier-3.svg"		 	alt="" hidden="true">
+		<img id="toxic-carrier"				width="42"	height="70" src="media/objects/toxic-carrier.svg"			alt="" hidden="true">
+		<img id="toxic-spreader"			width="49"	height="70" src="media/objects/toxic-spreader.svg"			alt="" hidden="true">
+		<img id="double-toxic-carrier"		width="74"	height="70" src="media/objects/double-toxic-carrier.svg"	alt="" hidden="true">
+		<img id="toxic-carrier-hit"			width="42"	height="70" src="media/objects/toxic-carrier-hit.svg"		alt="" hidden="true">
+		<img id="toxic-spreader-hit"		width="49"	height="70" src="media/objects/toxic-spreader-hit.svg"		alt="" hidden="true">
+		<img id="double-toxic-carrier-hit"	width="74"	height="70" src="media/objects/double-toxic-carrier-hit.svg"alt="" hidden="true">
+		<img id="charge-tier-1"				width="7"	height="12" src="media/objects/charge-tier-1.svg"			alt="" hidden="true">
+		<img id="charge-tier-2"				width="7"	height="12" src="media/objects/charge-tier-2.svg"			alt="" hidden="true">
+		<img id="charge-tier-3"				width="7"	height="12" src="media/objects/charge-tier-3.svg"			alt="" hidden="true">
+		<img id="breach"					width="100" height="16" src="media/objects/Breach.svg"					alt="" hidden="true">
+		<img id="nexus"						width="100" height="16" src="media/objects/Nexus.svg"					alt="" hidden="true">
 	</body>
 </html>
