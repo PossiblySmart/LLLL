@@ -1,57 +1,63 @@
 
 window.addEventListener('load', function () {
-    startGame();
+    InitializeUtils();
+    Welcome();
 });
 
-function loadWelcomeScreen() {
-    startGame();
-}
-
-function startGame() {
+const PlayGame = () => {
 
     const canvas = document.getElementById('main-canvas');
     const background = document.getElementById('background-canvas');
+    const blockSize = canvas.width / 10;
+    const map = new Map(background, blockSize);
 
-    const game = new Game(canvas, background);
+    const game = new Game(canvas, background, blockSize, map.theDock());
     const shop = new Shop(game, canvas);
 
-    var spawnInterval;
+    var refreshID;
 
-    const spawn = function() {
-        game.spawnEnemy();
-    }
+    InitializeEnemySpawning(game);
 
-    window.addEventListener('focus', function() {
-        clearInterval(spawnInterval);
-        spawnInterval = setInterval(spawn, game.statistics.enemySpawnDelay);
-    });
-
-    window.addEventListener('blur', function() {
-        clearInterval(spawnInterval);
-    });
-
-    // setInterval(function() {
-    //     game.enemies.forEach(enemy => { enemy.hit(25); });
-    // }, 1500);
-
-    game.makeLevel(0, 0);
     game.drawBlocks();
-    game.spawnEnemy();
     shop.open();
 
-    spawnInterval = setInterval(spawn, game.statistics.enemySpawnDelay);
+    const refresh = () => {
 
-    function refresh() {
+        if (game.statistics.gold < 0) {
+            EndGame(refreshID);
+            return;
+        }
+
+        shop.checkAvailability();
+        game.statistics.checkWave();
 
         game.clearScene();
         game.activateDefense();
         game.moveEnemies();
-        shop.checkGold();
         game.moveCharges();
         game.drawScene();
 
-        requestAnimationFrame(refresh);
+        console.log('lol');
+
+        refreshID = requestAnimationFrame(refresh);
     }
 
     refresh();
-}
+};
+
+const EndGame = (refreshID) => {
+
+    const defeatScreen = document.getElementById('defeat');
+
+    Object.keys(Indicators).forEach(property => {
+        IndicatorsEndGame[property].innerHTML = Indicators[property].innerHTML;
+    });
+
+    cancelAnimationFrame(refreshID);
+
+    Sounds.gameOver.volume = 0.5;
+    Sounds.gameOver.play();
+    
+    defeatScreen.style.transform = 'scale(1)';
+    defeatScreen.style.opacity = 1;
+};

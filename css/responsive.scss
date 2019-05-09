@@ -1,0 +1,109 @@
+@import 'variables';
+
+@media(max-width: 1660px) {
+
+    .game {
+        
+        grid-template-columns: auto;
+
+        &__menu {
+
+            &__title {
+                font-size: 2.5em;
+            }
+
+            &__tower {
+
+                width: 100%;
+                grid-template-rows: auto;
+                grid-template-columns: 1fr;
+                grid-template-areas: "thumbnail" "price";
+                row-gap: .3em;
+                padding: .6em;
+                justify-items: center;
+            }
+
+            &__tower-title,
+            &__tower-description {
+                display: none;
+            }
+        }
+    }
+}
+
+@media(max-width: 1460px) {
+
+    .game {
+
+        &__stats {
+            display: none;
+        }
+    }
+}
+
+@media(max-width: 1280px) {
+
+    .game {
+
+        grid-gap: 4em;
+		padding-top: 0;
+		grid-template-areas: "menu"
+							 "title"
+							 "canvas";
+
+        #menu-button:checked ~ &__menu { transform: translateY(0); opacity: 1; }
+        
+        &__menu-button { display: block; }
+
+		&__menu {
+
+			transform: translateY(-100%);
+			width: 100%;
+			padding: 1em;
+			opacity: 0;
+			top: 0;
+			left: 0;
+			position: absolute;
+			grid-gap: 1.5em;
+			place-items: center;
+			transition: transform 350ms ease-in-out, opacity 200ms ease-in-out;
+			transform-origin: left;
+            background-color: color(dark_);
+            grid-template-columns: auto;
+			grid-template-areas: "title title title"
+                                 "tower-tier-1 tower-tier-2 tower-tier-3";
+                                 
+            &__tower {
+
+            grid-template-columns: .6fr 1fr;
+            grid-template-areas: "thumbnail title"
+                                    "thumbnail description"
+                                    "thumbnail price";
+            }
+
+            &__tower-title,
+            &__tower-description {
+                display: block
+            }
+		}
+
+		&__sound-control {
+
+			left: 2em;
+			bottom: 0;
+			top: 100%;
+		}
+
+		&__message {
+
+			top: initial;
+			bottom: 1em;
+        }
+        
+        &__nuclear-gold,
+        &__nuclear-gold_plus,
+        &__nuclear-gold_minus {
+            right: 1em;
+        }
+    }
+}

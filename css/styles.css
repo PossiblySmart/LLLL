@@ -1,20 +1,4 @@
 @import url("https://use.typekit.net/vdq8enp.css");
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #1B1926;
-  font-family: obvia, sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 0.9rem;
-  color: #e2e2e2;
-  overflow: hidden;
-}
-
 mark {
   all: unset;
 }
@@ -79,120 +63,6 @@ mark.yellow_ {
   color: #ffff00;
 }
 
-h2 {
-  font-family: obvia, sans-serif;
-  font-weight: 800;
-  font-style: normal;
-  font-size: 1.8em;
-  text-shadow: 0.06em 0.06em #ff0000;
-  text-transform: uppercase;
-}
-
-ul {
-  list-style: none;
-}
-
-summary {
-  font-size: 0.8em;
-  opacity: 0.4;
-}
-
-#cursor-info {
-  background-color: #1b1926;
-  border: 1px solid #00ffff;
-  border-radius: 3px;
-  color: #00ffff;
-  padding: 0.5em;
-  font-size: 0.9em;
-}
-#cursor-info__x-coordinates::before {
-  content: "X: ";
-}
-#cursor-info__y-coordinates::before {
-  content: "Y: ";
-}
-
-.game {
-  position: relative;
-  width: 100vw;
-  display: grid;
-  grid-template-columns: 1.5fr 1000px 1fr;
-  grid-gap: 4em;
-  padding: 4em;
-  place-items: center;
-  grid-template-areas: "title title title" "menu canvas stats";
-}
-.game #menu-button {
-  display: none;
-}
-.game #menu-button:checked ~ .game__menu-button svg rect:nth-child(1) {
-  transform: translateX(-10px);
-}
-.game #menu-button:checked ~ .game__menu-button svg rect:nth-child(2) {
-  transform: translateX(-10px);
-}
-.game #menu-button:checked ~ .game__menu-button svg rect:nth-child(3) {
-  transform: translateX(-10px);
-}
-.game__menu-button {
-  display: none;
-  position: absolute;
-  justify-self: left;
-  left: 2em;
-  top: 2em;
-  z-index: 6;
-}
-.game__menu-button svg rect {
-  fill: #ff00ff;
-  transition: transform 250ms ease-in-out;
-}
-.game__menu-button svg rect:nth-child(1) {
-  transition-delay: 0ms;
-}
-.game__menu-button svg rect:nth-child(2) {
-  transition-delay: 0ms;
-}
-.game__menu-button svg rect:nth-child(3) {
-  transition-delay: 0ms;
-}
-.game #canvas {
-  position: relative;
-  margin-top: 1.5em;
-  grid-area: canvas;
-}
-.game #main-canvas, .game #background-canvas {
-  border: 1px solid #ff00ff;
-  border-radius: 5px;
-}
-.game #background-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-.game__title {
-  grid-area: title;
-  margin: -1em;
-  text-transform: uppercase;
-  font-style: italic;
-  font-size: 2em;
-  text-align: center;
-  color: #c1272d;
-  text-shadow: 0.05em 0.05em #ff00ff, 0.1em 0.1em #0000ff;
-}
-.game__title small {
-  display: block;
-  font-size: 0.6em;
-}
-.game__menu {
-  z-index: 999;
-  grid-area: menu;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 1.5em;
-  place-items: center;
-  grid-template-areas: "title" "tower-tier-1" "tower-tier-2" "tower-tier-3";
-}
 @keyframes flicker {
   0% {
     color: #00ffff;
@@ -230,6 +100,387 @@ summary {
     color: #00ffff;
     text-shadow: 0.05em 0.05em #ff00ff;
   }
+}
+@keyframes three-dots {
+  0% {
+    clip-path: inset(0 0px 0 0);
+  }
+  1% {
+    clip-path: inset(0 5px 0 0);
+  }
+  11% {
+    clip-path: inset(0 5px 0 0);
+  }
+  12% {
+    clip-path: inset(0 11px 0 0);
+  }
+  23% {
+    clip-path: inset(0 11px 0 0);
+  }
+  24% {
+    clip-path: inset(0 16px 0 0);
+  }
+  35% {
+    clip-path: inset(0 16px 0 0);
+  }
+  36% {
+    clip-path: inset(0 11px 0 0);
+  }
+  47% {
+    clip-path: inset(0 11px 0 0);
+  }
+  48% {
+    clip-path: inset(0 5px 0 0);
+  }
+  59% {
+    clip-path: inset(0 5px 0 0);
+  }
+  60% {
+    clip-path: inset(0 0px 0 0);
+  }
+}
+@keyframes color-shift {
+  to {
+    color: #ffff00;
+  }
+}
+@keyframes flicker-logo {
+  0% {
+    color: #ffff00;
+    text-shadow: 0.05em 0.05em #ff0000;
+  }
+  20% {
+    color: #ffff00;
+    text-shadow: 0.05em 0.05em #ff0000;
+  }
+  22% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  24% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  26% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  28% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  30% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  35% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  40% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  42% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  45% {
+    color: #ffff00;
+    text-shadow: 0.05em 0.05em #ff0000;
+  }
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1B1926;
+  font-family: obvia, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: #e2e2e2;
+  overflow-x: hidden;
+}
+
+h2 {
+  font-family: obvia, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 1.8em;
+  text-shadow: 0.06em 0.06em #ff0000;
+  text-transform: uppercase;
+}
+
+ul {
+  list-style: none;
+}
+
+summary {
+  font-size: 0.8em;
+  opacity: 0.4;
+}
+
+.welcome {
+  z-index: 1000;
+  background-color: #1b1926;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  opacity: 1;
+  transform: scale(1);
+  justify-items: center;
+  align-content: center;
+  grid: "canvas" 0.6fr "body" 1fr/1fr;
+  transition: opacity 1s ease-in-out, transform 100ms linear 1s;
+}
+.welcome__text {
+  grid-area: body;
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.welcome__title {
+  text-transform: uppercase;
+  font-style: italic;
+  font-size: 3em;
+  text-align: center;
+  color: #ffff00;
+  cursor: default;
+  animation: flicker-logo 5s ease-in-out 1s infinite;
+  text-shadow: 0.05em 0.05em #ff0000;
+}
+.welcome__title small {
+  display: block;
+  font-size: 0.6em;
+}
+.welcome__body {
+  display: block;
+  text-transform: uppercase;
+  font-size: 1.5em;
+  color: #ffff00;
+  font-weight: 700;
+  animation: three-dots 5s linear infinite;
+  text-shadow: 0.08em 0.08em 0 #c1272d;
+}
+.welcome #welcome-canvas {
+  grid-area: canvas;
+  align-self: center;
+  border: 1px solid #ff00ff;
+  border-radius: 5px;
+}
+.welcome summary {
+  position: absolute;
+  bottom: 5em;
+}
+
+.defeat {
+  z-index: 1000;
+  background-color: #1b1926;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  opacity: 0;
+  transform: scale(0);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  grid: "body" 0.8fr "stats" 1fr/1fr;
+  transition: opacity 1s ease-in-out;
+}
+.defeat__text {
+  grid-area: body;
+  text-align: center;
+  align-self: center;
+}
+.defeat__title {
+  text-transform: uppercase;
+  font-style: italic;
+  font-size: 5em;
+  text-align: center;
+  color: #ff0000;
+  cursor: default;
+  text-shadow: 0.05em 0.05em #3d053d, 0.1em 0.1em #0000ff;
+}
+.defeat__title small {
+  display: block;
+  font-size: 0.6em;
+}
+.defeat__body {
+  display: block;
+  font-size: 1.2em;
+}
+.defeat .game__stats {
+  text-align: center;
+}
+.defeat .game__stats__towers-stat-names,
+.defeat .game__stats__enemies-stat-names,
+.defeat .game__stats__wave-stat-names {
+  text-align: right;
+}
+.defeat .game__stats__towers-stat-values,
+.defeat .game__stats__enemies-stat-values,
+.defeat .game__stats__wave-stat-values {
+  text-align: left;
+}
+
+.game {
+  position: relative;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1.5fr 1000px 1fr;
+  grid-gap: 4em;
+  padding: 4em;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out 1s;
+  grid-template-areas: "title title title" "menu canvas stats";
+}
+.game #menu-button {
+  display: none;
+}
+.game #menu-button:checked ~ .game__menu-button svg rect:nth-child(1) {
+  transform: translateX(-10px);
+}
+.game #menu-button:checked ~ .game__menu-button svg rect:nth-child(2) {
+  transform: translateX(-10px);
+}
+.game #menu-button:checked ~ .game__menu-button svg rect:nth-child(3) {
+  transform: translateX(-10px);
+}
+.game__menu-button {
+  display: none;
+  position: absolute;
+  justify-self: left;
+  left: 2em;
+  top: 2em;
+  z-index: 6;
+}
+.game__menu-button svg rect {
+  fill: #ff00ff;
+  transition: transform 250ms ease-in-out;
+}
+.game__menu-button svg rect:nth-child(1) {
+  transition-delay: 0ms;
+}
+.game__menu-button svg rect:nth-child(2) {
+  transition-delay: 0ms;
+}
+.game__menu-button svg rect:nth-child(3) {
+  transition-delay: 0ms;
+}
+.game #cancel-purchase {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 1em;
+  transform: translateY(-120%) scale(1);
+  opacity: 0;
+  background-color: rgba(193, 39, 45, 0.7);
+  border: 1px solid red;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: opacity 250ms ease-in-out;
+  filter: none;
+  user-select: none;
+}
+.game #cancel-purchase:hover {
+  filter: brightness(120%);
+}
+.game #cancel-purchase:active {
+  transform: translateY(-120%) scale(0.9);
+}
+.game #tower-upgraded {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  color: #00ff00;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+  user-select: none;
+  text-align: center;
+  width: 100px;
+}
+@keyframes pulse {
+  to {
+    transform: scale(0.8);
+  }
+}
+.game #next-wave {
+  z-index: 999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(27, 25, 38, 0.5);
+  display: flex;
+  opacity: 0;
+  transform: scale(0);
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 5em;
+  color: #ffa500;
+  text-shadow: 0.05em 0.05em #ff00ff;
+  transition: opacity 300ms ease-in-out, transform 50ms linear 100ms;
+}
+.game #next-wave span {
+  transform: scale(1);
+  animation: pulse 1s ease-in-out infinite alternate-reverse;
+}
+.game #canvas {
+  position: relative;
+  margin-top: 1.5em;
+  grid-area: canvas;
+}
+.game #main-canvas, .game #background-canvas {
+  border: 1px solid #ff00ff;
+  border-radius: 5px;
+}
+.game #background-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.game__title {
+  grid-area: title;
+  margin: -1em;
+  text-transform: uppercase;
+  font-style: italic;
+  font-size: 2em;
+  text-align: center;
+  color: #c1272d;
+  cursor: default;
+  text-shadow: 0.05em 0.05em #ff00ff, 0.1em 0.1em #0000ff;
+  animation: none;
+}
+.game__title:hover {
+  animation: flicker 3s ease-in-out 200ms infinite;
+}
+.game__title small {
+  display: block;
+  font-size: 0.6em;
+}
+.game__menu {
+  z-index: 999;
+  grid-area: menu;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1.5em;
+  place-items: center;
+  grid-template-areas: "title" "tower-tier-1" "tower-tier-2" "tower-tier-3";
 }
 .game__menu__title {
   grid-area: title;
@@ -301,19 +552,17 @@ summary {
   color: #ffff00;
   font-weight: 800;
   font-size: 1.5em;
-}
-.game__menu__tower-price p {
   position: relative;
-  margin: 0;
 }
-.game__menu__tower-price p::after {
+.game__menu__tower-price::after {
   content: "";
-  width: 1.3em;
-  height: 1.3em;
+  width: 1.2em;
+  height: 1.2em;
   position: absolute;
-  margin-left: 0.5em;
-  background-image: url("../media/images/nuclear-gold.png");
+  margin-left: 0.2em;
+  background-image: url("../media/svg/misc/nuclear-gold.svg");
   background-size: cover;
+  background-repeat: no-repeat;
 }
 .game__stats {
   color: #bebebe;
@@ -408,14 +657,17 @@ summary {
   width: 3em;
   height: 2em;
   opacity: 0.75;
-  background-image: url("../media/images/sound-on.png");
+  background-image: url("../media/svg/misc/sound-control.svg");
   background-size: cover;
+  clip-path: inset(0 20px 0 0);
+  background-repeat: no-repeat;
   transform: scale(1);
+  cursor: pointer;
   transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
 }
 .game__sound-control:hover {
   opacity: 1;
-  animation: sound 350ms ease-in-out forwards;
+  animation: sound 500ms 1 ease-in-out;
 }
 .game__sound-control:active {
   transform: scale(0.7);
@@ -440,8 +692,9 @@ summary {
   bottom: 0.3rem;
   height: 1em;
   width: 1em;
-  background-image: url("../media/images/nuclear-gold.png");
+  background-image: url("../media/svg/misc/nuclear-gold.svg");
   background-size: contain;
+  background-repeat: no-repeat;
 }
 .game__nuclear-gold:hover {
   filter: contrast(150%);
@@ -522,8 +775,10 @@ summary {
   background-color: #ffff00;
 }
 .game__tower-upgrade.unavailable, .game__tower-sell.unavailable {
-  background-color: gray;
+  background-color: lightgray;
+  border-color: gray;
   color: #1b1926;
+  cursor: not-allowed;
 }
 .game__tower-upgrade.unavailable:hover, .game__tower-sell.unavailable:hover {
   background-color: gray;
@@ -612,6 +867,20 @@ summary {
   color: #1b1926;
   background-color: #ffff00;
 }
+.game .ready-to-upgrade {
+  z-index: 999;
+  display: block;
+  position: absolute;
+  font-weight: 900;
+  line-height: 0;
+  font-size: 1.2em;
+  margin: 0;
+  padding: 0;
+  color: #ffa500;
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 150ms ease-in-out, opacity 350ms ease-in-out;
+}
 .game .tooltip::after {
   content: "";
   display: none;
@@ -645,78 +914,6 @@ summary {
   left: 50%;
   bottom: 0;
   transform: translate(-50%, 50%) rotate(-45deg);
-}
-@media (max-width: 1800px) {
-  .game__menu__tower {
-    grid-template-columns: 1fr;
-    grid-template-areas: "title" "description" "price";
-  }
-  .game__menu__tower-thumbnail {
-    display: none;
-  }
-}
-@media (max-width: 1600px) {
-  .game {
-    grid-gap: 1.5em;
-    grid-template-columns: 1fr;
-    grid-template-areas: "title" "canvas" "menu";
-  }
-  .game__menu {
-    grid-template-columns: auto;
-    grid-template-areas: "title title title" "tower-tier-1 tower-tier-2 tower-tier-3";
-  }
-  .game__menu__tower {
-    grid-template-columns: 0.6fr 1fr;
-    grid-template-areas: "thumbnail title" "thumbnail description" "thumbnail price";
-  }
-  .game__menu__tower-thumbnail {
-    display: block;
-  }
-  .game__sound-control {
-    left: 4em;
-    bottom: 0;
-    top: 5em;
-  }
-  .game__stats {
-    display: none;
-  }
-}
-@media (max-width: 1367px) {
-  .game {
-    grid-gap: 4em;
-    padding-top: 0;
-    grid-template-areas: "menu" "title" "canvas";
-  }
-  #menu-button:checked ~ .game__menu {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  .game__menu-button {
-    display: block;
-  }
-  .game__menu {
-    transform: translateY(-100%);
-    width: 100%;
-    padding: 1em;
-    opacity: 0;
-    top: 0;
-    left: 0;
-    position: absolute;
-    grid-gap: 1.5em;
-    place-items: center;
-    transition: transform 350ms ease-in-out, opacity 200ms ease-in-out;
-    transform-origin: left;
-    background-color: #1b1926;
-  }
-  .game__sound-control {
-    left: 2em;
-    bottom: 0;
-    top: 90%;
-  }
-  .game__message {
-    top: initial;
-    bottom: 1em;
-  }
 }
 
 /*# sourceMappingURL=styles.css.map */

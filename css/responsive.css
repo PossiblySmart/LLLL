@@ -1,0 +1,267 @@
+mark {
+  all: unset;
+}
+mark.cyan_ {
+  color: #00ffff;
+}
+mark.orange_ {
+  color: #ffa500;
+}
+mark.violet_ {
+  color: #ff00ff;
+}
+mark.dark_ {
+  color: #1b1926;
+}
+mark.light_ {
+  color: #e2e2e2;
+}
+mark.gray_ {
+  color: #808080;
+}
+mark.light-gray_ {
+  color: #bebebe;
+}
+mark.red_ {
+  color: #ff0000;
+}
+mark.redwood_ {
+  color: #c1272d;
+}
+mark.green_ {
+  color: #00ff00;
+}
+mark.toxic-green_ {
+  color: #adff2f;
+}
+mark.deepgreen_ {
+  color: #39b54a;
+}
+mark.blue_ {
+  color: #0000ff;
+}
+mark.deepblue_ {
+  color: #00008b;
+}
+mark.orange-dim_ {
+  color: #f7931e;
+}
+mark.darkviolet_ {
+  color: #8a2be2;
+}
+mark.deepviolet_ {
+  color: #3d053d;
+}
+mark.pink_ {
+  color: #ee82ee;
+}
+mark.deeppink_ {
+  color: #db7093;
+}
+mark.yellow_ {
+  color: #ffff00;
+}
+
+@keyframes flicker {
+  0% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  20% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  22% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  24% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  26% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  28% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  30% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  35% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  40% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+}
+@keyframes three-dots {
+  0% {
+    clip-path: inset(0 0px 0 0);
+  }
+  1% {
+    clip-path: inset(0 5px 0 0);
+  }
+  11% {
+    clip-path: inset(0 5px 0 0);
+  }
+  12% {
+    clip-path: inset(0 11px 0 0);
+  }
+  23% {
+    clip-path: inset(0 11px 0 0);
+  }
+  24% {
+    clip-path: inset(0 16px 0 0);
+  }
+  35% {
+    clip-path: inset(0 16px 0 0);
+  }
+  36% {
+    clip-path: inset(0 11px 0 0);
+  }
+  47% {
+    clip-path: inset(0 11px 0 0);
+  }
+  48% {
+    clip-path: inset(0 5px 0 0);
+  }
+  59% {
+    clip-path: inset(0 5px 0 0);
+  }
+  60% {
+    clip-path: inset(0 0px 0 0);
+  }
+}
+@keyframes color-shift {
+  to {
+    color: #ffff00;
+  }
+}
+@keyframes flicker-logo {
+  0% {
+    color: #ffff00;
+    text-shadow: 0.05em 0.05em #ff0000;
+  }
+  20% {
+    color: #ffff00;
+    text-shadow: 0.05em 0.05em #ff0000;
+  }
+  22% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  24% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  26% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  28% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  30% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  35% {
+    color: #ff00ff;
+    text-shadow: 0.05em 0.05em #00ffff;
+  }
+  40% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  42% {
+    color: #00ffff;
+    text-shadow: 0.05em 0.05em #ff00ff;
+  }
+  45% {
+    color: #ffff00;
+    text-shadow: 0.05em 0.05em #ff0000;
+  }
+}
+@media (max-width: 1660px) {
+  .game {
+    grid-template-columns: auto;
+  }
+  .game__menu__title {
+    font-size: 2.5em;
+  }
+  .game__menu__tower {
+    width: 100%;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr;
+    grid-template-areas: "thumbnail" "price";
+    row-gap: 0.3em;
+    padding: 0.6em;
+    justify-items: center;
+  }
+  .game__menu__tower-title, .game__menu__tower-description {
+    display: none;
+  }
+}
+@media (max-width: 1460px) {
+  .game__stats {
+    display: none;
+  }
+}
+@media (max-width: 1280px) {
+  .game {
+    grid-gap: 4em;
+    padding-top: 0;
+    grid-template-areas: "menu" "title" "canvas";
+  }
+  #menu-button:checked ~ .game__menu {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .game__menu-button {
+    display: block;
+  }
+  .game__menu {
+    transform: translateY(-100%);
+    width: 100%;
+    padding: 1em;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    position: absolute;
+    grid-gap: 1.5em;
+    place-items: center;
+    transition: transform 350ms ease-in-out, opacity 200ms ease-in-out;
+    transform-origin: left;
+    background-color: #1b1926;
+    grid-template-columns: auto;
+    grid-template-areas: "title title title" "tower-tier-1 tower-tier-2 tower-tier-3";
+  }
+  .game__menu__tower {
+    grid-template-columns: 0.6fr 1fr;
+    grid-template-areas: "thumbnail title" "thumbnail description" "thumbnail price";
+  }
+  .game__menu__tower-title, .game__menu__tower-description {
+    display: block;
+  }
+  .game__sound-control {
+    left: 2em;
+    bottom: 0;
+    top: 100%;
+  }
+  .game__message {
+    top: initial;
+    bottom: 1em;
+  }
+  .game__nuclear-gold, .game__nuclear-gold_plus, .game__nuclear-gold_minus {
+    right: 1em;
+  }
+}
+
+/*# sourceMappingURL=responsive.css.map */

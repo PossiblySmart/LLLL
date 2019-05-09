@@ -1,44 +1,7 @@
 @import url("https://use.typekit.net/vdq8enp.css");
+@import 'variables';
 
 *, *::before, *::after { box-sizing: border-box; }
-
-$colors: (
-	
-	cyan_: #00ffff,
-	orange_: #ffa500,
-	violet_: #ff00ff,
-	dark_: #1b1926,
-	light_: #e2e2e2,
-	gray_: #808080,
-	light-gray_: #bebebe,
-	red_: #ff0000,
-	redwood_: #c1272d,
-	green_: #00ff00,
-	toxic-green_: #adff2f,
-	deepgreen_: #39b54a,
-	blue_: #0000ff,
-	deepblue_: #00008b,
-	orange-dim_: #f7931e,
-	darkviolet_: #8a2be2,
-	deepviolet_: #3d053d,
-	pink_: #ee82ee,
-	deeppink_: #db7093,
-	yellow_: #ffff00,
-);
-
-@function color($key) {
-	
-	@if map-has-key($colors, $key) {
-		@return map-get($colors, $key);
-	}
-	
-	@warn "Unknown '#{$key}'";
-	@return null;
-}
-
-$box-size: 70px;
-$border-radius: 4px;
-$border: 1px solid color(yellow_);
 
 body {
 
@@ -50,15 +13,7 @@ body {
 	font-style: normal;
 	font-size: 0.9rem;
 	color: color(light_);
-	overflow: hidden;
-}
-
-mark {
-
-	all: unset;
-	@each $color in map-keys($colors) {
-		&.#{$color} { color: color($color) }
-	}
+	overflow-x: hidden;
 }
 
 h2 {
@@ -79,17 +34,137 @@ summary {
 	opacity: .4;
 }
 
-#cursor-info {
+.welcome {
 
+	z-index: 1000;
 	background-color: color(dark_);
-	border: 1px solid color(cyan_);
-	border-radius: 3px;
-	color: color(cyan_);
-	padding: .5em;
-	font-size: .9em;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	opacity: 1;
+	transform: scale(1);
+	justify-items: center;
+	align-content: center;
+	grid: "canvas" .6fr "body" 1fr / 1fr;
+	transition: opacity 1s ease-in-out,
+				transform 100ms linear 1s;
 
-	&__x-coordinates { &::before { content: 'X: ' } }
-	&__y-coordinates { &::before { content: 'Y: ' } }
+	&__text {
+
+		grid-area: body;
+		text-align: center;
+		display: flex;
+		flex-flow: column;
+		align-items: center;
+	}
+
+	&__title {
+
+		text-transform: uppercase;
+		font-style: italic;
+		font-size: 3em;
+		text-align: center;
+		color: color(yellow_);
+		cursor: default;
+		animation: flicker-logo 5s ease-in-out 1s infinite;
+		text-shadow: .05em .05em color(red_);
+
+		small {
+
+			display: block;
+			font-size: .6em;
+		}
+	}
+
+	&__body {
+
+		display: block;
+		text-transform: uppercase;
+		font-size: 1.5em;
+		color: color(yellow_);
+		font-weight: 700;
+		animation: three-dots 5s linear infinite;
+		text-shadow: .08em .08em 0 color(redwood_); 
+	}
+
+	#welcome-canvas {
+
+		grid-area: canvas;
+		align-self: center;
+		border: 1px solid color(violet_);
+		border-radius: 5px;
+	}
+
+	summary {
+		
+		position: absolute;
+		bottom: 5em;
+	}
+}
+
+.defeat {
+
+	z-index: 1000;
+	background-color: color(dark_);
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	opacity: 0;
+	transform: scale(0);
+	display: grid;
+	justify-items: center;
+	align-content: center;
+	grid: "body" .8fr "stats" 1fr / 1fr;
+	transition: opacity 1s ease-in-out;
+
+	&__text {
+
+		grid-area: body;
+		text-align: center;
+		align-self: center;
+	}
+
+	&__title {
+
+		text-transform: uppercase;
+		font-style: italic;
+		font-size: 5em;
+		text-align: center;
+		color: color(red_);
+		cursor: default;
+		text-shadow: .05em .05em color(deepviolet_),
+					 .1em .1em color(blue_);
+
+		small {
+
+			display: block;
+			font-size: .6em;
+		}
+	}
+
+	&__body {
+
+		display: block;
+		font-size: 1.2em;
+	}
+
+	.game__stats {
+		text-align: center
+	}
+
+	.game__stats__towers-stat-names,
+	.game__stats__enemies-stat-names,
+	.game__stats__wave-stat-names {
+		text-align: right;
+	}
+
+	.game__stats__towers-stat-values,
+	.game__stats__enemies-stat-values,
+	.game__stats__wave-stat-values {
+		text-align: left;
+	}
 }
 
 .game {
@@ -101,6 +176,8 @@ summary {
 	grid-gap: 4em;
 	padding: 4em;
 	place-items: center;
+	opacity: 0;
+	transition: opacity 1s ease-in-out 1s;
 	grid-template-areas:"title title title" 
 						"menu canvas stats";
 
@@ -126,6 +203,80 @@ summary {
 			fill: color(violet_);
 			transition: transform 250ms ease-in-out;
 			@for $i from 1 through 3 { &:nth-child(#{$i}) { transition-delay: 0ms } }
+		}
+	}
+
+	#cancel-purchase {
+
+		position: absolute;
+		left: 0;
+		top: 0;
+		padding: 1em;
+		transform: translateY(-120%) scale(1);
+		opacity: 0;
+		background-color: rgba(color(redwood_), .7);
+		border: 1px solid red;
+		border-radius: $border-radius;
+		font-weight: 700;
+		text-transform: uppercase;
+		transition: opacity 250ms ease-in-out;
+		filter: none;
+		user-select: none;
+
+		&:hover {	
+			filter: brightness(120%);
+		}
+
+		&:active {
+			transform: translateY(-120%) scale(.9);
+		}
+	}
+
+	#tower-upgraded {
+
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		color: color(green_);
+		text-transform: uppercase;
+		font-weight: 700;
+		opacity: 0;
+		transition: opacity 250ms ease-in-out;
+		user-select: none;
+		text-align: center;
+		width: 100px;
+	}
+
+	@keyframes pulse {
+		to { transform: scale(.8) }
+	}
+
+	#next-wave {
+
+		z-index: 999;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background-color: rgba(color(dark_), .5);
+		display: flex;
+		opacity: 0;
+		transform: scale(0);
+		justify-content: center;
+		align-items: center;
+		text-transform: uppercase;
+		font-weight: 900;
+		font-size: 5em;
+		color: color(orange_);
+		text-shadow: .05em .05em color(violet_);
+		transition: opacity 300ms ease-in-out,
+					transform 50ms linear 100ms;
+		
+		span {
+
+			transform: scale(1);
+			animation: pulse 1s ease-in-out infinite alternate-reverse;
 		}
 	}
 
@@ -159,8 +310,14 @@ summary {
 		font-size: 2em;
 		text-align: center;
 		color: color(redwood_);
+		cursor: default;
 		text-shadow: .05em .05em color(violet_),
 					 .1em .1em color(blue_);
+		animation: none;
+
+		&:hover {
+			animation: flicker 3s ease-in-out 200ms infinite;
+		}
 
 		small {
 
@@ -170,63 +327,6 @@ summary {
 	}
 
 	&__menu {
-
-		@keyframes flicker {
-			
-			0% {
-
-				color: color(cyan_);
-				text-shadow: .05em .05em color(violet_);
-			}
-
-			20% {
-
-				color: color(cyan_);
-				text-shadow: .05em .05em color(violet_);
-			}
-
-			22% {
-
-				color: color(violet_);
-				text-shadow: .05em .05em color(cyan_);
-			}
-
-			24% {
-
-				color: color(violet_);
-				text-shadow: .05em .05em color(cyan_);
-			}
-
-			26% {
-
-				color: color(cyan_);
-				text-shadow: .05em .05em color(violet_);
-			}
-
-			28% {
-
-				color: color(cyan_);
-				text-shadow: .05em .05em color(violet_);
-			}
-
-			30% {
-
-				color: color(violet_);
-				text-shadow: .05em .05em color(cyan_);
-			}
-
-			35% {
-
-				color: color(violet_);
-				text-shadow: .05em .05em color(cyan_);
-			}
-
-			40% {
-
-				color: color(cyan_);
-				text-shadow: .05em .05em color(violet_);
-			}
-		}
 
 		z-index: 999;
 		grid-area: menu;
@@ -312,23 +412,19 @@ summary {
 			color: color(yellow_);
 			font-weight: 800;
 			font-size: 1.5em;
+			position: relative;
 
-			p {
+			&::after {
 
-				position: relative;
-				margin: 0;
-
-				&::after {
-
-					content: '';
-					width: 1.3em;
-					height: 1.3em;
-					position: absolute;
-					margin-left: .5em;
-					background-image: url('../media/images/nuclear-gold.png');
-					background-size: cover;
-				}
-			} 
+				content: '';
+				width: 1.2em;
+				height: 1.2em;
+				position: absolute;
+				margin-left: .2em;
+				background-image: url('../media/svg/misc/nuclear-gold.svg');
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
 		}
 	}
 
@@ -387,15 +483,18 @@ summary {
 		width: 3em;
 		height: 2em;
 		opacity: .75;
-		background-image: url('../media/images/sound-on.png');
+		background-image: url('../media/svg/misc/sound-control.svg');
 		background-size: cover;
+		clip-path: inset(0 20px 0 0);
+		background-repeat: no-repeat;
 		transform: scale(1);
+		cursor: pointer;
 		transition: opacity 200ms ease-in-out,
 					transform 200ms ease-in-out;
 
 		&:hover {
 			opacity: 1;
-			animation: sound 350ms ease-in-out forwards;
+			animation: sound 500ms 1 ease-in-out;
 		}
 
 		&:active { transform: scale(0.7) }
@@ -423,8 +522,9 @@ summary {
 			bottom: .3rem;
 			height: 1em;
 			width: 1em;
-			background-image: url('../media/images/nuclear-gold.png');
+			background-image: url('../media/svg/misc/nuclear-gold.svg');
 			background-size: contain;
+			background-repeat: no-repeat;
 		}
 
 		&:hover {
@@ -529,8 +629,10 @@ summary {
 
 		&.unavailable {
 			
-			background-color: gray;
+			background-color: lightgray;
+			border-color: gray;
 			color: color(dark_);
+			cursor: not-allowed;
 
 			&:hover {
 
@@ -650,6 +752,23 @@ summary {
 		}
 	}
 
+	.ready-to-upgrade {
+
+		z-index: 999;
+		display: block;
+		position: absolute;
+		font-weight: 900;
+		line-height: 0;
+		font-size: 1.2em;
+		margin: 0;
+		padding: 0;
+		color: color(orange_);
+		opacity: 0;
+		transform: scale(0);
+		transition: transform 150ms ease-in-out,
+					opacity 350ms ease-in-out;				  
+	}
+
 	.tooltip {
 
 		&::after {
@@ -693,98 +812,6 @@ summary {
 			left: 50%;
 			bottom: 0;
 			transform: translate(-50%, 50%) rotate(-45deg);
-		}
-	}
-
-	@media(max-width: 1800px) {
-
-		&__menu {
-			
-			&__tower {
-
-				grid-template-columns: 1fr;
-				grid-template-areas: "title"
-									 "description"
-									 "price";
-			}
-			
-			&__tower-thumbnail { display: none }
-		}
-	}
-
-	@media(max-width: 1600px) {
-
-		grid-gap: 1.5em;
-		grid-template-columns: 1fr;
-		grid-template-areas: "title"
-							 "canvas"
-							 "menu";
-
-		&__menu {
-
-			grid-template-columns: auto;
-			grid-template-areas: "title title title"
-								 "tower-tier-1 tower-tier-2 tower-tier-3";
-			
-			&__tower {
-
-				grid-template-columns: .6fr 1fr;
-				grid-template-areas: "thumbnail title"
-									 "thumbnail description"
-									 "thumbnail price";
-			}
-			
-			&__tower-thumbnail { display: block }
-		}
-
-		&__sound-control {
-
-			left: 4em;
-			bottom: 0;
-			top: 5em;
-		}
-
-		&__stats { display: none; }
-	}
-
-	@media(max-width: 1367px) {
-
-		grid-gap: 4em;
-		padding-top: 0;
-		grid-template-areas: "menu"
-							 "title"
-							 "canvas";
-
-		#menu-button:checked ~ &__menu { transform: translateY(0); opacity: 1; }
-		&__menu-button { display: block; }
-
-		&__menu {
-
-			transform: translateY(-100%);
-			width: 100%;
-			padding: 1em;
-			opacity: 0;
-			top: 0;
-			left: 0;
-			position: absolute;
-			grid-gap: 1.5em;
-			place-items: center;
-			transition: transform 350ms ease-in-out, opacity 200ms ease-in-out;
-			transform-origin: left;
-			background-color: color(dark_);
-		}
-
-		&__sound-control {
-
-			left: 2em;
-			bottom: 0;
-			top: 90%;
-		}
-
-		&__message {
-
-			top: initial;
-			bottom: 1em;
 		}
 	}
 }

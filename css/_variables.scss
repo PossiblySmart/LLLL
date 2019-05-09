@@ -1,0 +1,192 @@
+$colors: (
+	
+	cyan_: #00ffff,
+	orange_: #ffa500,
+	violet_: #ff00ff,
+	dark_: #1b1926,
+	light_: #e2e2e2,
+	gray_: #808080,
+	light-gray_: #bebebe,
+	red_: #ff0000,
+	redwood_: #c1272d,
+	green_: #00ff00,
+	toxic-green_: #adff2f,
+	deepgreen_: #39b54a,
+	blue_: #0000ff,
+	deepblue_: #00008b,
+	orange-dim_: #f7931e,
+	darkviolet_: #8a2be2,
+	deepviolet_: #3d053d,
+	pink_: #ee82ee,
+	deeppink_: #db7093,
+	yellow_: #ffff00,
+);
+
+@function color($key) {
+	
+	@if map-has-key($colors, $key) {
+		@return map-get($colors, $key);
+	}
+	
+	@warn "Unknown '#{$key}'";
+	@return null;
+}
+
+$box-size: 70px;
+$border-radius: 4px;
+$border: 1px solid color(yellow_);
+
+mark {
+
+	all: unset;
+	@each $color in map-keys($colors) {
+		&.#{$color} { color: color($color) }
+	}
+}
+
+@keyframes flicker {
+			
+	0% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	20% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	22% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	24% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	26% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	28% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	30% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	35% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	40% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+}
+
+@keyframes three-dots {
+
+	0% { clip-path: inset(0 0px 0 0) }
+	1% { clip-path: inset(0 5px 0 0) }
+	11% { clip-path: inset(0 5px 0 0) }
+	12% { clip-path: inset(0 11px 0 0) }
+	23% { clip-path: inset(0 11px 0 0) }
+	24% { clip-path: inset(0 16px 0 0) }
+
+	35% { clip-path: inset(0 16px 0 0) }
+	36% { clip-path: inset(0 11px 0 0) }
+	47% { clip-path: inset(0 11px 0 0) }
+	48% { clip-path: inset(0 5px 0 0) }
+	59% { clip-path: inset(0 5px 0 0) }
+	60% { clip-path: inset(0 0px 0 0) }
+}
+
+@keyframes color-shift {
+	to { color: color(yellow_) }
+}
+
+@keyframes flicker-logo {
+			
+	0% {
+
+		color: color(yellow_);
+		text-shadow: .05em .05em color(red_);
+	}
+
+	20% {
+
+		color: color(yellow_);
+		text-shadow: .05em .05em color(red_);
+	}
+
+	22% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	24% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	26% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	28% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	30% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	35% {
+
+		color: color(violet_);
+		text-shadow: .05em .05em color(cyan_);
+	}
+
+	40% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	42% {
+
+		color: color(cyan_);
+		text-shadow: .05em .05em color(violet_);
+	}
+
+	45% {
+
+		color: color(yellow_);
+		text-shadow: .05em .05em color(red_);
+	}
+}

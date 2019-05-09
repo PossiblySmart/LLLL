@@ -5,18 +5,19 @@ class Statistics {
 
         this.game = game;
 
-        this.towers = game.towers.length;
+        this.towers = 0;
         this.towersUpgradable = 0;
         this.towersMaxTier = 0;
         
-        this.enemies = game.enemies.length;
+        this.enemies = 0;
         this.enemiesMaxTier = 1;
         this.enemiesTotalDefeated = 0;
 
         this.wave = 1;
-        this.nextWave = 15;
+        this.waveIncrementer = 1;
+        this.nextWave = 3 * this.waveIncrementer;
 
-        this.gold = 500;
+        this.gold = 200;
         this.goldMinus = 0;
         this.goldPlus = 0;
 
@@ -31,6 +32,31 @@ class Statistics {
 
         Indicators[indicator].style.opacity = 0;
 		Indicators[indicator].style.bottom = '-1rem';
+    }
+
+    checkWave() {
+
+        Indicators.set('nextWave', this.nextWave - this.enemiesTotalDefeated);
+
+        if (this.enemiesTotalDefeated == this.nextWave) {
+            
+            if (this.wave % 10 == 0)
+                this.waveIncrementer += this.wave - 8;
+            else
+                this.waveIncrementer++;
+
+            this.wave++;
+            this.nextWave = 5 * this.waveIncrementer;
+
+            Indicators.set('wave', this.wave);
+            Indicators.set('nextWave', this.nextWave);
+            Message.showNextWave();
+            
+            Sounds.play('newWave');
+
+            clearInterval(spawnInterval);
+            setTimeout(InitializeEnemySpawning, 3500, this.game);
+        }
     }
     
     reduceGold(amount) {
@@ -70,7 +96,7 @@ class Statistics {
 
     enemyDown(enemy) {
 
-        this.increaseGold(enemy.tier * 100);
+        this.increaseGold(enemy.tier * enemy.tier * 50);
         this.game.remove('enemies', enemy);
 
         enemy.currentBlock.hasEnemy = false;

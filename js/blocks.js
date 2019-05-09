@@ -41,16 +41,21 @@ class Road extends Block {
 
     drawSelf() {
 
-        this.context.fillStyle = 'rgba(0, 0, 0, 0)';
+        this.context.fillStyle = Colors.alpha('black', '0');
 		this.context.fillRect(this.x, this.y, this.size, this.size);
-		this.context.strokeStyle = 'rgba(255, 0, 255, .3)';
+		this.context.strokeStyle = Colors.alpha('violet', '0.2');
         this.context.strokeRect(this.x, this.y, this.size, this.size);
         
         if (this.number) {
 
             this.context.fillStyle = Colors.light;
             this.context.font = '20px sans';
-            this.context.fillText(this.number, this.x + this.size / 2 - 5, this.y + this.size / 2);
+
+            this.context.fillText(
+                this.number,
+                this.x + this.size / 2 - 5,
+                this.y + this.size / 2
+            );
         }
 	}
 }
@@ -63,21 +68,20 @@ class TowerSpot extends Block {
         
         this.type = 'tower-spot';
         this.tower = 0;
+        this.highlight = false;
     }
 
     drawSelf() {
 
-        switch(this.tower.tier) {
-
-            case 1: this.context.fillStyle = 'rgba(0, 255, 255, .1)'; break;
-            case 2: this.context.fillStyle = 'rgba(255, 127, 0, .1)'; break;
-            case 3: this.context.fillStyle = 'rgba(255, 0, 255, .1)'; break;
-            
-            default: this.context.fillStyle = 'rgba(44, 34, 48, .35)'; break;
-        }
+        if (this.tower.tier)
+            this.context.fillStyle = this.tower.color;
+        else if (this.highlight)
+            this.context.fillStyle = Colors.alpha('violet', '0.1');
+        else
+            this.context.fillStyle = Colors.alpha('violet', '0.03');
 
 		this.context.fillRect(this.x, this.y, this.size, this.size);
-		this.context.strokeStyle = '#ff00ff';
+		this.context.strokeStyle = Colors.violet;
         this.context.strokeRect(this.x, this.y, this.size, this.size);
         
         if (this.number) {
@@ -100,7 +104,14 @@ class Breach extends Block {
     }
 
     drawSelf() {
-		this.context.drawImage(this.image, this.x, this.y, this.size, this.size / 6);
+
+		this.context.drawImage(
+            this.image, 
+            this.x,
+            this.y,
+            this.size,
+            this.size / 6
+        );
 	}
 }
 
@@ -116,8 +127,13 @@ class Nexus extends Block {
 
     drawSelf() {
 
-		this.context.save();
-		this.context.translate(this.canvas.width / 2 + (this.x + this.size) / 2, this.canvas.height / 2 + this.y / 2 - this.size);
+        this.context.save();
+        
+        this.context.translate(
+            this.canvas.width / 2 + (this.x + this.size) / 2,
+            this.canvas.height / 2 + this.y / 2 - this.size
+        );
+        
 		this.context.rotate(90 * Math.PI / 180);
 		this.context.drawImage(this.image, 0, 0, this.size, this.size / 6);
 		this.context.restore();

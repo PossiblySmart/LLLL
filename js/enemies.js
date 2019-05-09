@@ -11,7 +11,7 @@ class Enemy {
 		this.context = canvas.getContext('2d');
 		this.size = size;
 
-		this.currentAngle = 180;
+		this.angle = 180;
 		this.targetAngle = 0;
 		this.movesCounter = 0;
 		this.alpha = 1.0;
@@ -19,20 +19,15 @@ class Enemy {
 		this.x = x;
 		this.y = y;
 
-		this.bodyWidthStart = this.x + (this.size - this.width) / 2;
-		this.bodyWidthEnd = this.bodyWidthStart + this.width;
-
-		this.bodyHeightStart = this.y + (this.size - this.height) / 2;
-		this.bodyHeightEnd = this.bodyHeightStart + this.height;
-
-		this.body
-
 		this.blocks = blocks;
 		
 		this.blockIndex;
 		this.currentBlock;
 
 		this.directions = ['right', 'bottom', 'top'];
+
+		if (this.canvas.id == 'welcome-canvas')
+			this.directions.push('left');
 
 		this.directions.forEach(direction => {
 			this[direction + 'Block'];
@@ -43,6 +38,8 @@ class Enemy {
 
 		this.getNearbyBlocks();
 		this.targetBlock = this.currentBlock;
+
+		this.hitRegistered = false;
 	}
 
 	getNearbyBlocks() {
@@ -70,11 +67,18 @@ class Enemy {
 	}
 
 	calculateTargetAngle() {
-		return Math.floor(Math.atan2(this.targetBlock.y - this.currentBlock.y, this.targetBlock.x - this.currentBlock.x) * 180 / Math.PI) + 90;
+		
+		return Math.floor(
+			
+			Math.atan2(
+				this.targetBlock.y - this.currentBlock.y,
+				this.targetBlock.x - this.currentBlock.x
+			) * 180 / Math.PI) + 90;
 	}
 
 	targetBlockIsReached() {
-		return (this.x == this.targetBlock.x && this.y == this.targetBlock.y) ? true : false;
+		return (this.x == this.targetBlock.x &&
+				this.y == this.targetBlock.y) ? true : false;
 	}
 
 	isDefeated() {
@@ -89,12 +93,8 @@ class Enemy {
 
 		if (this.isDefeated()) {
 
-			if (this.alpha > 0 )
-				this.fade();
-			
-			else
-				this.statistics.enemyDown(this);
-
+			Sounds.play('enemyHasReachedNexus');
+			this.statistics.enemyDown(this);
 			return;
 		}
 
@@ -107,6 +107,7 @@ class Enemy {
 
 			if (this.currentBlock.is('nexus')) {
 
+				Sounds.play('enemyHasReachedNexus');
 				if (this.alpha > 0) this.fade();
 				else this.statistics.enemyHasReachedNexus(this);
 				return;
@@ -131,35 +132,45 @@ class Enemy {
 
 	getDirection() {
 
-		if (this.rightBlock.is('road') && this.bottomBlock.is('road')) {
+		if (this.rightBlock.is('road') &&
+			this.bottomBlock.is('road')) {
 
 			if (this.direction == 'top')
 				return 'right';
 
-			else if (this.direction == 'bottom' && this.movesCounter > this.canvas.height / this.size)
+			else if (this.direction == 'bottom' &&
+					 this.movesCounter > this.canvas.height / this.size)
 				return 'right';
 
 			else
 				return this.randomDirection('right', 'bottom', 50);
 		}
 
-		if (this.direction == 'right' && this.topBlock.is('road') && this.bottomBlock.is('road')) {
+		if (this.canvas.id == 'welcome-canvas')
+			return 'left';
 
-			if (this.movesCounter > 0 && this.movesCounter <= this.canvas.height / this.size)
+		if (this.direction == 'right' && this.topBlock.is('road') &&
+			this.bottomBlock.is('road')) {
+
+			if (this.movesCounter > 0 &&
+				this.movesCounter <= this.canvas.height / this.size)
 				return this.randomDirection('top', 'bottom', 50);
 
 			else
 				return 'bottom';
 		}
 
-		if (this.direction == 'right' && this.topBlock.is('road') && this.rightBlock.is('road')) 
+		if (this.direction == 'right' && this.topBlock.is('road') &&
+			this.rightBlock.is('road')) 
 			return this.randomDirection('top', 'right', 50);
 
-		if (this[this.direction + 'Block'].is('road') || this[this.direction + 'Block'].is('nexus'))
+		if (this[this.direction + 'Block'].is('road') ||
+			this[this.direction + 'Block'].is('nexus'))
 			return this.direction;
 
 		for (let i = 0; i < this.directions.length; i++)
-			if (this[this.directions[i] + 'Block'].is('road') || this[this.directions[i] + 'Block'].is('nexus'))
+			if (this[this.directions[i] + 'Block'].is('road') ||
+				this[this.directions[i] + 'Block'].is('nexus'))
 				return this.directions[i];
 	}
 
@@ -171,35 +182,73 @@ class Enemy {
 
 	turn() {
 
-		if (this.currentAngle < this.targetAngle)
-			this.currentAngle += this.speed;
+		this.image = this.state.turn;
+		this.hitImage = this.state.turnHit;
 
-		else if (this.currentAngle > this.targetAngle)
-			this.currentAngle -= this.speed;
+		if (this.angle < this.targetAngle)
+			this.angle += this.speed;
 
-		else this.turned = true;
+		else if (this.angle > this.targetAngle)
+			this.angle -= this.speed;
+
+		else {
+
+			this.image = this.state.default;
+			this.hitImage = this.state.hit;
+			this.turned = true;
+		}
 	}
 
 	drawSelf() {
 
 		this.context.save();
 		this.context.globalAlpha = this.alpha;
-		this.context.translate(this.x + this.width / 2 + (this.size - this.size * this.width / 100) / 2, this.y + this.height / 2 + this.size * this.height / 1000);
-		this.context.rotate(this.currentAngle * Math.PI / 180);
-		this.context.drawImage(this.image, -(this.size * this.width / 100) / 2 + 1, -(this.size * this.height / 100) / 2 - 4, this.size * this.width / 100, this.size * this.height / 100);
+		this.context.translate(this.x + this.size / 2, this.y + this.size / 2);
+		this.context.rotate(this.angle * Math.PI / 180);
+		
+		this.context.drawImage(
+		
+			this.image,
+			-this.size / 2,
+			-this.size / 2,
+			this.size,
+			this.size
+		);
+
+		if (this.hitRegistered) {
+
+			this.context.drawImage(
+				
+				this.hitImage,
+				-this.size / 2,
+				-this.size / 2,
+				this.size,
+				this.size
+			);
+		}
+
 		this.context.restore();	
 	}
 
 	hit(amount) {
 
-		const enemy = this;
-
 		this.health -= amount;
-		this.image = document.getElementById(this.name + '-hit');
+		this.hitRegistered = true;
 
-		setTimeout(() => {
-			enemy.image = document.getElementById(enemy.name);
-		}, 250);
+		setTimeout((enemy) => {
+			enemy.hitRegistered = false;
+		}, 250, this);
+	}
+}
+
+class EnemyState {
+
+	constructor(name) {
+
+		this.default = document.getElementById(name + '_0');
+		this.hit = document.getElementById(name + '_0_hit');
+		this.turn = document.getElementById(name + '_1');
+		this.turnHit = document.getElementById(name + '_1_hit');
 	}
 }
 
@@ -209,15 +258,14 @@ class ToxicCarrier extends Enemy {
 
 		super(game, statistics, canvas, blocks, objectSize, x, y);
 
-		this.name = 'toxic-carrier';
-		this.image = document.getElementById(this.name);
-		this.width = this.image.width;
-		this.height = this.image.height;
+		this.name = 'toxicCarrier';
 		this.tier = 1;
-
-		this.health = 100;
-
+		this.health = 300;
 		this.speed = 1;
+
+		this.state = new EnemyState(this.name);
+		this.image = this.state.default;
+		this.hitImage = this.state.hit;
 	}
 }
 
@@ -227,15 +275,14 @@ class ToxicSpreader extends Enemy {
 
 		super(game, statistics, canvas, blocks, objectSize, x, y);
 
-		this.name = 'toxic-spreader';
-		this.image = document.getElementById(this.name);
-		this.width = this.image.width;
-		this.height = this.image.height;
+		this.name = 'toxicSpreader';
 		this.tier = 2;
-
-		this.health = 70;
-
+		this.health = 500;
 		this.speed = 2;
+
+		this.state = new EnemyState(this.name);
+		this.image = this.state.default;
+		this.hitImage = this.state.hit;
 	}
 }
 
@@ -245,14 +292,13 @@ class DoubleToxicCarrier extends Enemy {
 
 		super(game, statistics, canvas, blocks, objectSize, x, y);
 
-		this.name = 'double-toxic-carrier';
-		this.image = document.getElementById(this.name);
-		this.width = this.image.width;
-		this.height = this.image.height;
+		this.name = 'doubleToxicCarrier';
 		this.tier = 3;
-
-		this.health = 700;
-
+		this.health = 6666;
 		this.speed = 0.5;
+
+		this.state = new EnemyState(this.name);
+		this.image = this.state.default;
+		this.hitImage = this.state.hit;
 	}
 }

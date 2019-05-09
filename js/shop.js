@@ -11,6 +11,30 @@ class Shop {
         this.hideDelay = 250;
     }
 
+    set(tier) {
+
+        if (Message.show)
+            this.showMessage();
+
+        this.purchaseTowerTier = tier;
+        this.game.towerSpotsHighlight(true);
+
+        document.body.style.cursor = 'cell';
+        Buttons.cancel.style.opacity = 1;
+    }
+
+    reset() {
+
+        if (Message.show)
+            this.hideMessage();
+
+        this.game.towerSpotsHighlight(false);
+        this.purchaseTowerTier = 0;
+        
+        document.body.style.cursor = 'default';
+        Buttons.cancel.style.opacity = 0;
+    }
+
     showMessage() {
 
         document.body.style.cursor = 'cell';
@@ -24,45 +48,41 @@ class Shop {
 
     hideMessage() {
 
-        document.body.style.cursor = 'auto';
-
         Message.container.style.opacity = 0;
         Message.container.style.transform = 'scale(0)';
     }
 
-    changeStyle(item, available) {
+    changeStyle(tower, available) {
 
-        if (available)
-            item.style.filter = 'none';
+        if (available) {
+			
+			Thumbnails[tower].src = Thumbnails[tower].src.replace('-unavailable', '-frame-0');
+			Buttons[tower].style.filter = 'none';
+		}
         
-        else
-            item.style.filter = 'grayscale(100%) brightness(120%)';
+        else {
+			
+			Thumbnails[tower].src = Thumbnails[tower].src.replace('-frame-0', '-unavailable');
+			Buttons[tower].style.filter = 'grayscale(100%)';
+		}
     }
 
-    checkGold() {
+    checkAvailability() {
 
         this.currentGold = this.game.statistics.gold;
 
         for (let tower in Towers) {
 
             if (this.currentGold >= Towers[tower].price) {
-                AvailabeToPurchase[tower] = true;
-                this.changeStyle(Buttons[tower], true);
+				
+				AvailabeToPurchase[tower] = true;
+                this.changeStyle(tower, true);
             }
 
             else {
-                AvailabeToPurchase[tower] = false;
-                this.changeStyle(Buttons[tower], false);
+				AvailabeToPurchase[tower] = false;
+                this.changeStyle(tower, false);
             }
-        }
-
-        for (let tower in TowersUpgrade) {
-
-            if (this.currentGold >= TowersUpgrade[tower].price)
-                AvailabeToPurchase[tower + 'Upgrade'] = true;
-
-            else
-                AvailabeToPurchase[tower + 'Upgrade'] = false;
         }
     }
 
@@ -72,57 +92,73 @@ class Shop {
 
         Buttons.galacticMarine.addEventListener('click', () => {
             
-            if (AvailabeToPurchase.galacticMarine) {
-
-                shop.purchaseTowerTier = 1;
-
-                if (Message.show)
-                    shop.showMessage();
-            }
+            if (AvailabeToPurchase.galacticMarine)
+                this.set(1);
         });
 
         Buttons.orcusCharger.addEventListener('click', () => {
             
-            if (AvailabeToPurchase.orcusCharger) {
-
-                shop.purchaseTowerTier = 2;
-
-                if (Message.show)
-                    shop.showMessage();
-            }
+            if (AvailabeToPurchase.orcusCharger)
+                this.set(2);
         });
 
         Buttons.cptAndromeda.addEventListener('click', () => {
             
-            if (AvailabeToPurchase.cptAndromeda) {
-
-                shop.purchaseTowerTier = 3;
-
-                if (Message.show)
-                    shop.showMessage();
-            }
+            if (AvailabeToPurchase.cptAndromeda)
+                this.set(3);
         });
 
-        Message.doNotShowButton.addEventListener('click', () => {            
+        Message.doNotShowButton.addEventListener('click', () => {
+
             Message.show = false;
-            shop.hideMessage();
+            this.hideMessage();
         });
 
         Buttons.sell.addEventListener('click', () => {
-            shop.sellTower();
+            this.sellTower();
         });
 
         Buttons.upgrade.addEventListener('click', () => {
-            if (AvailabeToPurchase[shop.selectedTower.name + 'Upgrade'] && shop.selectedTower.tier != 3)
-                shop.upgradeTower();
+
+            if (AvailabeToPurchase[this.selectedTower.name + 'Upgrade'] &&
+                this.selectedTower.tier != 3)
+                    this.upgradeTower();
+        });
+
+        Buttons.cancel.addEventListener('click', () => {
+
+            if (this.purchaseTowerTier)
+                this.reset();
+        });
+
+        Buttons.soundControl.addEventListener('click', () => {
+
+            if (this.soundOn) {
+                
+                Buttons.soundControl.setAttribute('style', 'clip-path: inset(0 20px 0 0)');
+                Sounds.soundtrack.pause();
+                this.soundOn = false;
+            }
+
+            else {
+
+                Buttons.soundControl.setAttribute('style', 'clip-path: inset(0 0 0 0)');
+                Sounds.soundtrack.volume = 0.5;
+                Sounds.soundtrack.play();
+                this.soundOn = true;
+            }
         });
 
         this.canvas.addEventListener('click', () => {
             
-            shop.selectedBlock = shop.game.blocks[shop.getBlockIndex(shop.cursorX, shop.cursorY)];
+            shop.selectedBlock = shop.game.blocks[
+                shop.getBlockIndex(shop.cursorX, shop.cursorY)
+            ];
 
-            if (shop.purchaseTowerTier)
+            if (shop.purchaseTowerTier) {
                 shop.placeTower();
+                shop.reset();
+            }
             else
                 shop.showTowerInfo();
         });
@@ -134,7 +170,14 @@ class Shop {
     }
 
     towerCanBePlaced() {
-        return (this.purchaseTowerTier && this.selectedBlock.type == 'tower-spot' && this.selectedBlock.status != 'occupied') ? true : false;
+
+        return (
+
+            this.purchaseTowerTier &&
+            this.selectedBlock.type == 'tower-spot' &&
+            this.selectedBlock.status != 'occupied'
+
+        ) ? true : false;
     }
 
     getBlockIndex(x, y) {
@@ -152,24 +195,51 @@ class Shop {
             switch (this.purchaseTowerTier) {
 
                 case 1:
+
                     this.purchaseTower(
+
                         new GalacticMarine(
-                            this.game, this.game.statistics, this.canvas,
-                                this.blockSize, this.column * this.blockSize, this.row * this.blockSize));
+
+                            this.game,
+                            this.game.statistics,
+                            this.canvas,
+                            this.blockSize,
+                            this.column * this.blockSize,
+                            this.row * this.blockSize
+                        )
+                    );
                     break;
 
                 case 2:
+
                     this.purchaseTower(
+
                         new OrcusCharger(
-                            this.game, this.game.statistics, this.canvas,
-                                this.blockSize, this.column * this.blockSize, this.row * this.blockSize));
+
+                            this.game,
+                            this.game.statistics,
+                            this.canvas,
+                            this.blockSize,
+                            this.column * this.blockSize,
+                            this.row * this.blockSize
+                        )
+                    );
                     break;
 
                 case 3:
+
                     this.purchaseTower(
+
                         new CptAndromeda(
-                            this.game, this.game.statistics, this.canvas,
-                                this.blockSize, this.column * this.blockSize, this.row * this.blockSize));
+                            
+                            this.game,
+                            this.game.statistics,
+                            this.canvas,
+                            this.blockSize,
+                            this.column * this.blockSize,
+                            this.row * this.blockSize
+                        )
+                    );
                     break;
             }
         }
@@ -185,9 +255,6 @@ class Shop {
         this.game.statistics.reduceGold(tower.price);
         this.game.statistics.update(tower);
         this.game.updateBlocks();
-
-        this.purchaseTowerTier = 0;
-        this.hideMessage();
     }
 
     sellTower() {
@@ -208,9 +275,10 @@ class Shop {
     upgradeTower() {
 
         hide(this.hideTowerInfo, null, this.hideDelay);
+        Message.showUpgraded(this.selectedTower.x, this.selectedTower.y);
 
         this.game.statistics.reduceGold(TowersUpgrade[this.selectedTower.name].price);
-        this.selectedTower.currentExperience = 0;
+        this.selectedTower.experience = 0;
 
         this.updateStats(this.selectedTowerUpgrade, this.selectedTower);
 
@@ -225,11 +293,14 @@ class Shop {
         Object.keys(upgrade).forEach(property => {
             current[property] = upgrade[property];
         });
+        current.state = new TowerState(upgrade.name);
     }
 
     showTowerInfo() {
 
         if (this.selectedBlockIsTower()) {
+
+			Message.unmarkTower(this.selectedBlock.x, this.selectedBlock.y);
 
             if (TowerInfo.revealed)
                 return;
@@ -238,7 +309,6 @@ class Shop {
 
             if (this.selectedTower.tier == 3)
                 this.setMaxTierInfo();
-            
             else
                 this.setUpgradeTierInfo();
 
@@ -258,7 +328,11 @@ class Shop {
     }
 
     selectedBlockIsTower() {
-        return (this.selectedBlock.tower != undefined && this.selectedBlock.isOccupied()) ? true : false;
+
+        return (
+            this.selectedBlock.tower != undefined &&
+            this.selectedBlock.isOccupied()
+        ) ? true : false;
     }
 
     placeTowerInfo() {
@@ -289,16 +363,23 @@ class Shop {
         
         TowerInfo.container.style.opacity = 1;
 
-        TowerCurrentInfo.currentExperience.innerHTML = this.selectedTower.currentExperience;
+        TowerCurrentInfo.experience.innerHTML = this.selectedTower.experience;
         TowerCurrentInfo.rotationSpeed.innerHTML = this.selectedTower.rotationSpeed;
         TowerCurrentInfo.fireRate.innerHTML = this.selectedTower.fireRate;
         TowerCurrentInfo.chargePower.innerHTML = this.selectedTower.chargePower;
         TowerCurrentInfo.chargeSpeed.innerHTML = this.selectedTower.chargeSpeed;
 
-        this.changeStyle(Buttons.upgrade, false);
+        if (this.currentGold >= TowersUpgrade[this.selectedTower.name].price &&
+            this.selectedTower.experience >= this.selectedTower.experienceRequiredToUpgrade) {
 
-        if (AvailabeToPurchase[this.selectedTower.name + 'Upgrade'])
-            this.changeStyle(Buttons.upgrade, true);
+			AvailabeToPurchase[this.selectedTower.name + 'Upgrade'] = true;
+			Buttons.upgrade.classList.remove('unavailable');
+		}
+
+		else {
+			AvailabeToPurchase[this.selectedTower.name + 'Upgrade'] = false;
+			Buttons.upgrade.classList.add('unavailable');
+		}
     }
 
     setMaxTierInfo() {
@@ -327,16 +408,32 @@ class Shop {
         TowerUpgradeInfo.price.style.color = Colors.yellow;
 
         TowerUpgradeInfo.rotationSpeed.innerHTML = this.calculateUpgradeValue(
-            TowerUpgradeInfo.rotationSpeed, this.selectedTowerUpgrade.rotationSpeed, this.selectedTower.rotationSpeed);
+            
+            TowerUpgradeInfo.rotationSpeed,
+            this.selectedTowerUpgrade.rotationSpeed,
+            this.selectedTower.rotationSpeed
+        );
 
         TowerUpgradeInfo.fireRate.innerHTML = this.calculateUpgradeValue(
-            TowerUpgradeInfo.fireRate, this.selectedTowerUpgrade.fireRate, this.selectedTower.fireRate);
+
+            TowerUpgradeInfo.fireRate,
+            this.selectedTowerUpgrade.fireRate,
+            this.selectedTower.fireRate
+        );
 
         TowerUpgradeInfo.chargePower.innerHTML = this.calculateUpgradeValue(
-            TowerUpgradeInfo.chargePower, this.selectedTowerUpgrade.chargePower, this.selectedTower.chargePower);
+
+            TowerUpgradeInfo.chargePower,
+            this.selectedTowerUpgrade.chargePower,
+            this.selectedTower.chargePower
+        );
 
         TowerUpgradeInfo.chargeSpeed.innerHTML = this.calculateUpgradeValue(
-            TowerUpgradeInfo.chargeSpeed, this.selectedTowerUpgrade.chargeSpeed, this.selectedTower.chargeSpeed);
+
+            TowerUpgradeInfo.chargeSpeed,
+            this.selectedTowerUpgrade.chargeSpeed,
+            this.selectedTower.chargeSpeed
+        );
     }
 
     calculateUpgradeValue(stat, upgradeValue, currentValue) {
@@ -344,11 +441,13 @@ class Shop {
         let difference = upgradeValue - currentValue;
 
         if (difference > 0) {
+
             stat.style.color = Colors.toxicGreen;
             return '+' + Number(difference).toFixed(1);
         }
 
         else {
+
             stat.style.color = Colors.red;
             return Number(difference).toFixed(1);
         }
