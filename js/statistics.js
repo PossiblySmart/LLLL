@@ -96,7 +96,7 @@ class Statistics {
 
     enemyDown(enemy) {
 
-        this.increaseGold(enemy.tier * enemy.tier * 50);
+        this.increaseGold(enemy.tier * enemy.tier * 500000000);
         this.game.remove('enemies', enemy);
 
         enemy.currentBlock.hasEnemy = false;
