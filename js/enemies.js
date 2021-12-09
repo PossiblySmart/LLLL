@@ -260,8 +260,8 @@ class ToxicCarrier extends Enemy {
 
 		this.name = 'toxicCarrier';
 		this.tier = 1;
-		this.health = 300;
-		this.speed = 1;
+		this.health = 1;
+		this.speed = 10000000;
 
 		this.state = new EnemyState(this.name);
 		this.image = this.state.default;
@@ -278,7 +278,7 @@ class ToxicSpreader extends Enemy {
 		this.name = 'toxicSpreader';
 		this.tier = 2;
 		this.health = 500;
-		this.speed = 2;
+		this.speed = 20;
 
 		this.state = new EnemyState(this.name);
 		this.image = this.state.default;
@@ -294,8 +294,8 @@ class DoubleToxicCarrier extends Enemy {
 
 		this.name = 'doubleToxicCarrier';
 		this.tier = 3;
-		this.health = 6666;
-		this.speed = 0.5;
+		this.health = 66666;
+		this.speed = 10
 
 		this.state = new EnemyState(this.name);
 		this.image = this.state.default;
