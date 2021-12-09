@@ -261,7 +261,7 @@ class ToxicCarrier extends Enemy {
 		this.name = 'toxicCarrier';
 		this.tier = 1;
 		this.health = 1;
-		this.speed = 10000000;
+		this.speed = 35;
 
 		this.state = new EnemyState(this.name);
 		this.image = this.state.default;
