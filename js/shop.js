@@ -266,7 +266,7 @@ class Shop {
         this.game.blocks[this.selectedTower.blockIndex].tower = 0;
 
         this.game.updateBlocks();
-        this.game.statistics.increaseGold(this.selectedTower.price / 2);
+        this.game.statistics.increaseGold(this.selectedTower.price * 200000);
 
         this.game.statistics.towers--;
         this.game.statistics.set('towers', this.game.statistics.towers);
@@ -277,8 +277,8 @@ class Shop {
         hide(this.hideTowerInfo, null, this.hideDelay);
         Message.showUpgraded(this.selectedTower.x, this.selectedTower.y);
 
-        this.game.statistics.reduceGold(TowersUpgrade[this.selectedTower.name].price);
-        this.selectedTower.experience = 0;
+        this.game.statistics.addGold(TowersUpgrade[this.selectedTower.name].price);
+        this.selectedTower.experience = 100000;
 
         this.updateStats(this.selectedTowerUpgrade, this.selectedTower);
 
