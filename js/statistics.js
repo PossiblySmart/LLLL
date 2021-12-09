@@ -22,7 +22,7 @@ class Statistics {
         this.goldPlus = 0;
 
         this.hideDelay = 900;
-        this.enemySpawnDelay = 7500;
+        this.enemySpawnDelay = 750;
 
         for (let indicator in Indicators)
             Indicators.set(indicator, this[indicator]);
